@@ -8,11 +8,11 @@
     <fragment
             android:id="@+id/BmrFragment"
             android:name="com.lifestyle.BmrFragment"
-            android:label="@string/bmr_fragment_label"
+            android:label="@string/label_bmr_fragment"
             tools:layout="@layout/fragment_bmr" />
     <fragment
             android:id="@+id/HomeFragment"
             android:name="com.lifestyle.HomeFragment"
-            android:label="@string/home_fragment_label"
+            android:label="@string/label_home_fragment"
             tools:layout="@layout/fragment_home" />
 </navigation>

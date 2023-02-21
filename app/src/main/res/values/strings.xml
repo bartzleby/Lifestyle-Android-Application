@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">LIfestyle</string>
-    <string name="action_bmr">BMR</string>
 
-    <string name="bmr_fragment_label">BMR</string>
-    <string name="home_fragment_label">Home</string>
+    <string name="label_bmr_fragment">BMR</string>
+    <string name="label_home_fragment">Home</string>
+
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="hello_bmr_fragment">Hello BMR fragment</string>
