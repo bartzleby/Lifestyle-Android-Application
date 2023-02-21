@@ -9,6 +9,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.fragment.app.commit
 import com.lifestyle.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -44,10 +45,17 @@ class MainActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+        var fragmentId: Int? = null
+        when (item.itemId) {
+            R.id.action_bmr -> fragmentId = R.id.BmrFragment
         }
+        fragmentId?.let {
+            supportFragmentManager.commit {
+                findNavController(R.id.nav_host_fragment_content_main).navigate(fragmentId)
+            }
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {
