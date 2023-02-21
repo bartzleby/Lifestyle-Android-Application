@@ -1,17 +1,13 @@
 <resources>
     <string name="app_name">LIfestyle</string>
     <string name="action_bmr">BMR</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+
     <string name="bmr_fragment_label">BMR</string>
     <string name="home_fragment_label">Home</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="hello_bmr_fragment">Hello BMR fragment</string>
     <string name="hello_home_fragment">Hello home fragment</string>
+
     <string name="button_register_text">Register</string>
 </resources>
