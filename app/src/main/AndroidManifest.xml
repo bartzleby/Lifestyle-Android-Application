@@ -15,6 +15,11 @@
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
+             Note from John: I got an API key, but I am only using it on my machine since it's tied
+             to my billing. Once you have an API key, if you want to restrict it's use, follow this
+             guide to get the SHA-1 fingerprint of the app:
+             https://www.geeksforgeeks.org/how-to-generate-sha-1-fingerprint-of-keystore-certificate-in-android-studio/
+
              To get one, follow the directions here:
 
                 https://developers.google.com/maps/documentation/android-sdk/get-api-key
@@ -25,7 +30,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY" />
+            android:value="${MAPS_API_KEY}" />
 
         <activity
             android:name=".MainActivity"
