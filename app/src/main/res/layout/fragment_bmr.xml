@@ -15,7 +15,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintBottom_toTopOf="@+id/text_view_bmr_base_preface"
             app:layout_constraintVertical_chainStyle="packed" />
@@ -39,7 +39,7 @@
             android:id="@+id/text_view_bmr_base_calculated"
             app:layout_constraintTop_toBottomOf="@+id/text_view_bmr_base_preface"
             android:layout_marginTop="8dp"
-            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             app:layout_constraintStart_toStartOf="@+id/text_view_bmr_base_preface"
             app:layout_constraintBottom_toTopOf="@+id/text_view_bmr_target_preface" />
 
@@ -62,7 +62,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             app:layout_constraintStart_toStartOf="@+id/text_view_bmr_target_preface" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
