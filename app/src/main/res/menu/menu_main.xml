@@ -7,4 +7,9 @@
         android:orderInCategory="100"
         android:title="@string/label_bmr_fragment"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_hikes_maps"
+        android:orderInCategory="200"
+        android:title="@string/label_hikes_maps_fragment"
+        app:showAsAction="never" />
 </menu>

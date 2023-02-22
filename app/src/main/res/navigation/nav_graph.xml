@@ -15,4 +15,9 @@
             android:name="com.lifestyle.HomeFragment"
             android:label="@string/label_home_fragment"
             tools:layout="@layout/fragment_home" />
+    <fragment
+            android:id="@+id/HikesMapsFragment"
+            android:name="com.lifestyle.HikesMapsFragment"
+            android:label="@string/label_hikes_maps_fragment"
+            tools:layout="@layout/fragment_hikes_maps" />
 </navigation>
