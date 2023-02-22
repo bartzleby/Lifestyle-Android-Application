@@ -1,11 +1,16 @@
 package com.lifestyle
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.fragment.app.Fragment
+import com.lifestyle.PermissionUtils
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -14,7 +19,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 
-class HikesMapsFragment : Fragment() {
+class HikesMapsFragment : Fragment(), OnRequestPermissionsResultCallback {
+
+    private var permissionDenied = false
+    private lateinit var map: GoogleMap
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -43,5 +51,50 @@ class HikesMapsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
+    }
+
+    /**
+     * Enables the My Location layer if the user has granted permission for coarse location data
+     * Otherwise, requests it
+     * Based on example code found here:
+     * https://developers.google.com/maps/documentation/android-sdk/location#kotlin
+     */
+    private fun enableMyLocation() {
+
+        // If the user granted permission for coarse location data, then enable the
+        // my location layer
+        if (ActivityCompat.checkSelfPermission(
+                activity!!.applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            map.isMyLocationEnabled = true
+            return
+        }
+
+        // TODO: If they didn't grant access, it would be good to tell them why we want it
+        /**
+         * Example code can be found here:
+         * https://developers.google.com/maps/documentation/android-sdk/location#kotlin
+         *
+         * This is based on "2. If a permission rationale dialog should be shown"
+         */
+        /*if (ActivityCompat.shouldShowRequestPermissionRationale(
+                activity!!,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        ) {
+            PermissionUtils.RequestDialog.newInstance(
+                LOCATION_PERMISSION_REQUEST_CODE, true
+            ).show(supportFragmentManager, "dialog")
+            return
+        }
+
+        // If the user didn't grant permission for coarse location data, request it
+        ActivityCompat.requestPermissions(
+            activity!!,
+            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION
+            ), LOCATION_PERMISSION_REQUEST_CODE
+        )*/
+
     }
 }
