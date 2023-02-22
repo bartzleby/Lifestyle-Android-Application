@@ -1,15 +1,17 @@
 package com.lifestyle
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuBuilder
+import androidx.fragment.app.commit
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
-import androidx.fragment.app.commit
+import com.google.android.material.snackbar.Snackbar
 import com.lifestyle.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -35,9 +37,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
+        // https://stackoverflow.com/questions/18374183/how-to-show-icons-in-overflow-menu-in-actionbar
+        if (menu is MenuBuilder) {
+            menu.setOptionalIconsVisible(true)
+        }
         return true
     }
 
