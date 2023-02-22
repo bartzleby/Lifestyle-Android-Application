@@ -4,7 +4,12 @@
     <string name="label_bmr_fragment">BMR</string>
     <string name="label_home_fragment">Home</string>
 
-    <string name="hello_bmr_fragment">Hello BMR fragment</string>
+    <string name="text_view_bmr_title">BMR Calculator</string>
+    <string name="text_view_bmr_base_preface">Age:\nGender:\nHeight:\nWeight:\nYour calculated BMR (basal metabolic rate) is</string>
+    <string name="text_view_bmr_base_calculated">0 calories</string>
+    <string name="text_view_bmr_target_preface">Activity:\nYour daily calorie target is</string>
+    <string name="text_view_bmr_target_calculated">0 calories</string>
+
     <string name="hello_home_fragment">Hello home fragment</string>
 
     <string name="button_register_text">Register</string>
