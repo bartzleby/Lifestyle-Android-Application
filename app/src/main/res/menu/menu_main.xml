@@ -7,4 +7,11 @@
         android:orderInCategory="100"
         android:title="@string/label_bmr_fragment"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_weather"
+        android:orderInCategory="100"
+        android:title="@string/label_weather_fragment"
+        app:showAsAction="never" />
+
 </menu>

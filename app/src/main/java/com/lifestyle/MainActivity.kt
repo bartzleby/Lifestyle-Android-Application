@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         var fragmentId: Int? = null
         when (item.itemId) {
             R.id.action_bmr -> fragmentId = R.id.BmrFragment
+            R.id.action_weather -> fragmentId = R.id.WeatherFragment
         }
         fragmentId?.let {
             supportFragmentManager.commit {

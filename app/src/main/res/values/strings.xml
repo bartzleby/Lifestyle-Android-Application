@@ -8,4 +8,6 @@
     <string name="hello_home_fragment">Hello home fragment</string>
 
     <string name="button_register_text">Register</string>
+    <string name="label_weather_fragment">Weather</string>
+    <string name="hello_weather_fragment">Weather</string>
 </resources>
