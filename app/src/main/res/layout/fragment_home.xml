@@ -9,15 +9,15 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hello_home_fragment"
-            android:id="@+id/textView"
+            android:text="@string/text_view_home_welcome"
+            android:id="@+id/text_view_home_welcome"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5"
             android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-            app:layout_constraintBottom_toTopOf="@+id/button_register"
+            app:layout_constraintBottom_toTopOf="@+id/text_view_home_welcome_prompt"
             app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
@@ -25,10 +25,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/button_register"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_home_welcome_prompt"
             android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintEnd_toEndOf="@+id/textView" />
+            app:layout_constraintStart_toStartOf="@+id/text_view_home_welcome_prompt"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_home_welcome_prompt"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+            android:text="@string/text_view_home_welcome_prompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_view_home_welcome_prompt"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_home_welcome"
+            app:layout_constraintBottom_toTopOf="@+id/button_register"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/text_view_home_welcome"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_home_welcome"
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
