@@ -31,9 +31,10 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.fabWeather.setOnClickListener { view ->
-            Snackbar.make(view, "Missing location info", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+        binding.fabWeather.setOnClickListener { _ ->
+            supportFragmentManager.commit {
+                findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.WeatherFragment)
+            }
         }
     }
 
