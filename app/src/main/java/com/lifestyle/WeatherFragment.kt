@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
 import com.lifestyle.databinding.FragmentWeatherBinding
 import okhttp3.*
 import java.io.IOException
@@ -28,12 +31,6 @@ class WeatherFragment : Fragment() {
         val view = binding.root
         val btnFetchWeather = view.findViewById<View>(R.id.button_fetch_weather) as Button
         btnFetchWeather.setOnClickListener { _ ->
-            Toast.makeText(
-                getActivity()!!.getApplicationContext(),
-                "fetching weather",
-                Toast.LENGTH_SHORT
-            ).show()
-
             fetchWeather()
         }
 
@@ -42,14 +39,21 @@ class WeatherFragment : Fragment() {
 
     private fun fetchWeather(): String {
         val url =
-            baseUrl + "?location="+location+"&apikey="+wapikey
-        val request = Request.Builder()
-            .url(url)
-            .build()
+            baseUrl + "?location=" + location + "&apikey=" + wapikey
+        val request = Request.Builder().url(url).build()
 
         client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {}
-            override fun onResponse(call: Call, response: Response) = println(response.body?.string())
+            override fun onFailure(call: Call, e: IOException) {
+                //TODO: handle network errors, etc.
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val resbody = response.body?.string()
+                val gson = GsonBuilder().create()
+                val weatherInfo = gson.fromJson(resbody, TomorrowResponse::class.java)
+
+                println(resbody)
+            }
         })
 
         return "fetched"
@@ -61,3 +65,42 @@ class WeatherFragment : Fragment() {
         _binding = null
     }
 }
+
+class TomorrowResponse(
+    val data: TomorrowData,
+    val location: TomorrowLocation
+)
+
+class TomorrowLocation(
+    val lat: Float,
+    val lon: Float
+)
+
+class TomorrowData(
+    val time: String,
+    val values: WeatherValues
+)
+
+class WeatherValues(
+    val cloudBase: Float?,
+    val cloudCeiling: Float?,
+    val cloudCover: Float?,
+    val dewPoint: Float?,
+    val freezingRainIntensity: Float?,
+    val humidity: Float?,
+    val precipitationProbability: Float?,
+    val pressureSurfaceLevel: Float?,
+    val rainIntensity: Float?,
+    val sleetIntensity: Float?,
+    val snowIntensity: Float?,
+    val temperature: Float?,
+    val temperatureApparent: Float?,
+    val uvHealthConcern: Float?,
+    val uvIndex: Float?,
+    val visibility: Float?,
+    val weatherCode: Float?,
+    val windDirection: Float?,
+    val windGust: Float?,
+    val windSpeed: Float?
+)
+

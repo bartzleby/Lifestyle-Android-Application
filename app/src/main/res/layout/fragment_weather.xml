@@ -43,4 +43,14 @@
         app:layout_constraintStart_toStartOf="@+id/text_view_weather_welcome"
         app:layout_constraintTop_toBottomOf="@+id/text_view_weather_welcome" />
 
+    <TextView
+        android:id="@+id/tv_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Temperature"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_fetch_weather" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
