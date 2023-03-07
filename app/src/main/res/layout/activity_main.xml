@@ -21,13 +21,14 @@
 
     <include layout="@layout/content_main" />
 
+    <!--    TODO: detect whether currently displaying weather fragment-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_weather"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginBottom="16dp"
-            app:srcCompat="@drawable/outline_wb_sunny" />
+        android:id="@+id/fab_weather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="16dp"
+        app:srcCompat="@drawable/outline_wb_sunny" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

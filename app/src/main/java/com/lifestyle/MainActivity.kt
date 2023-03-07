@@ -32,6 +32,10 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         binding.fabWeather.setOnClickListener { _ ->
+            // TODO: get relevant data and put in bundle for WeatherFragment
+            val weatherData = Bundle()
+            weatherData.putString("TEST_DATA", "TESTING")
+            //weatherFragment.arguments = weatherData
             supportFragmentManager.commit {
                 findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.WeatherFragment)
             }
