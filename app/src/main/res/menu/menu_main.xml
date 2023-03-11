@@ -3,13 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.lifestyle.MainActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_user_info"
-        android:orderInCategory="100"
-        android:title="User Info"
-        app:showAsAction="never" />
+            android:id="@+id/action_bmr"
+            android:orderInCategory="100"
+            android:title="@string/label_bmr_fragment"
+            app:showAsAction="never"
+            android:icon="@drawable/outline_calculate" />
 </menu>

@@ -1,14 +1,17 @@
 package com.lifestyle
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuBuilder
+import androidx.fragment.app.commit
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
+import com.google.android.material.snackbar.Snackbar
 import com.lifestyle.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -28,15 +31,20 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+        binding.fabWeather.setOnClickListener { view ->
+            Snackbar.make(view, "Missing location info", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
+        // https://stackoverflow.com/questions/18374183/how-to-show-icons-in-overflow-menu-in-actionbar
+        if (menu is MenuBuilder) {
+            menu.setOptionalIconsVisible(true)
+        }
         return true
     }
 
@@ -44,10 +52,17 @@ class MainActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+        var fragmentId: Int? = null
+        when (item.itemId) {
+            R.id.action_bmr -> fragmentId = R.id.BmrFragment
         }
+        fragmentId?.let {
+            supportFragmentManager.commit {
+                findNavController(R.id.nav_host_fragment_content_main).navigate(fragmentId)
+            }
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {
