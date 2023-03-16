@@ -24,7 +24,6 @@ class WeatherFragment : Fragment() {
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
-    private val ctx = getActivity()!!.applicationContext
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -37,7 +36,7 @@ class WeatherFragment : Fragment() {
         val btnFetchWeather = view.findViewById<View>(R.id.button_fetch_weather) as Button
 
         fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(ctx)
+            LocationServices.getFusedLocationProviderClient(getActivity()!!.applicationContext)
 
         val location = getCurrentLocation()
 
@@ -71,12 +70,12 @@ class WeatherFragment : Fragment() {
     private fun checkPermissions(): Boolean {
         if (
             ActivityCompat.checkSelfPermission(
-                ctx, Manifest.permission.ACCESS_COARSE_LOCATION
+                getActivity()!!.applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION
             )
             == PackageManager.PERMISSION_GRANTED
             &&
             ActivityCompat.checkSelfPermission(
-                ctx, Manifest.permission.ACCESS_FINE_LOCATION
+                getActivity()!!.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION
             )
             == PackageManager.PERMISSION_GRANTED
         ) {
