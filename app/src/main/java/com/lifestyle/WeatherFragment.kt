@@ -1,15 +1,17 @@
 package com.lifestyle
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
-import com.google.gson.Gson
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
 import com.lifestyle.databinding.FragmentWeatherBinding
 import okhttp3.*
 import java.io.IOException
@@ -17,10 +19,12 @@ import java.io.IOException
 class WeatherFragment : Fragment() {
     private val client = OkHttpClient()
     private val baseUrl = "https://api.tomorrow.io/v4/weather/realtime"
-    private val location = "40.75872069597532,-73.98529171943665"
     private val wapikey: String = BuildConfig.WAPI_KEY
     private var _binding: FragmentWeatherBinding? = null
 
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    private val ctx = getActivity()!!.applicationContext
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -29,17 +33,75 @@ class WeatherFragment : Fragment() {
     ): View {
         _binding = FragmentWeatherBinding.inflate(inflater, container, false)
         val view = binding.root
+
         val btnFetchWeather = view.findViewById<View>(R.id.button_fetch_weather) as Button
-        btnFetchWeather.setOnClickListener { _ ->
-            fetchWeather()
+
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(ctx)
+
+        val location = getCurrentLocation()
+
+        btnFetchWeather.setOnClickListener {
+            fetchWeather(location)
         }
 
         return view
     }
 
-    private fun fetchWeather(): String {
+    private fun getCurrentLocation(): String {
+
+        if (checkPermissions()) {
+            if (isLocationEnabled()) {
+
+            } else {
+                // open settings
+            }
+
+        } else {
+            requestPermission()
+        }
+
+        return "40.75872069597532,-73.98529171943665"
+    }
+
+    companion object {
+        private const val PERMISSION_REQUEST_ACCESS_LOCATION = 1
+    }
+
+    private fun checkPermissions(): Boolean {
+        if (
+            ActivityCompat.checkSelfPermission(
+                ctx, Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            == PackageManager.PERMISSION_GRANTED
+            &&
+            ActivityCompat.checkSelfPermission(
+                ctx, Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            return true
+        }
+        return false
+    }
+
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(
+            getActivity()!!,
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ), PERMISSION_REQUEST_ACCESS_LOCATION
+        )
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        return false
+    }
+
+    private fun fetchWeather(location: String): String {
         val url =
-            baseUrl + "?location=" + location + "&apikey=" + wapikey
+            "$baseUrl?location=$location&apikey=$wapikey"
         val request = Request.Builder().url(url).build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -57,6 +119,14 @@ class WeatherFragment : Fragment() {
         })
 
         return "fetched"
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onDestroyView() {
