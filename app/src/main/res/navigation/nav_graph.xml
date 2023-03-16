@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/HomeFragment">
+    app:startDestination="@id/UserInfo">
 
     <fragment
             android:id="@+id/BmrFragment"
@@ -15,4 +15,10 @@
             android:name="com.lifestyle.HomeFragment"
             android:label="@string/label_home_fragment"
             tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/UserInfo"
+        android:name="com.lifestyle.UserInfo"
+        android:label="@string/label_home_fragment"
+        tools:layout="@layout/fragment_user_info" />
 </navigation>

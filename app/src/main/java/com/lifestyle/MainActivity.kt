@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.fragment.app.commit
@@ -18,6 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    //private var mButtonRegister: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,11 +34,32 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
+
+
         binding.fabWeather.setOnClickListener { view ->
             Snackbar.make(view, "Missing location info", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
+
+
+
+
+
+
+
     }
+   /** override fun onClick(view: View) {
+        when (view.id) {
+            R.id.button_register -> {
+                val fragment = UserInfo.newInstance();
+                val transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id., fragment).commit();
+
+
+            }
+        }
+    } */
+
 
     @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
