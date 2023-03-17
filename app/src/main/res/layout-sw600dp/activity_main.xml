@@ -8,6 +8,8 @@
                 android:id="@+id/navigation_rail"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                app:headerLayout="@layout/header_navigation_rail"
+                app:menuGravity="center"
                 app:menu="@menu/menu_navigation_rail" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
