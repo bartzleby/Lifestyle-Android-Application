@@ -7,13 +7,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.fragment.app.commit
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.lifestyle.databinding.ActivityMainBinding
 
@@ -23,6 +23,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var findHikesNearMe: String? = "hikes near me"
     //private var mButtonRegister: Button? = null
+
+    // https://developer.android.com/guide/fragments/communicate#viewmodel
+    private val viewModel: SharedViewModel by viewModels()
 
     private fun navigateToFragmentFromItem(item: MenuItem): Boolean {
         var fragmentId: Int? = null

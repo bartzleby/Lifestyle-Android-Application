@@ -14,6 +14,7 @@ import android.widget.Spinner
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.navigation.fragment.findNavController
 import java.util.*
@@ -33,11 +34,14 @@ private var mThumbnailImage: Bitmap? = null
 //Define a global intent variable
 //private var mDisplayIntent: Intent? = null
 
-
 class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedListener  {
     // TODO: Rename and change types of parameters
    // private var param1: String? = null
    //private var param2: String? = null
+
+    // https://developer.android.com/guide/fragments/communicate#viewmodel
+    private val viewModel: SharedViewModel by activityViewModels()
+
     //Create variables to hold the strings
     private var mFullName: String? = null
     private var mAge: Int? = null
@@ -76,7 +80,6 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
     private val weight_list = (85.. 500).toList()
     private val feet_list : List<String> = listOf("1'", "2'", "3'", "4'", "5'", "6'", "7'")
     private val inches_list : List<String> = listOf("0\"", "1\"", "2\"", "3\"", "4\"", "5\"", "6\"", "7\"", "8\"", "9\"", "10\"", "11\"")
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -171,38 +174,38 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
     }
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         //Toast.makeText(view!!.context, items[p2], Toast.LENGTH_SHORT).show();
-       when (p0!!.id) {
+        when (p0!!.id) {
             R.id.sex_spinner-> {
               //  mTvSex!!.text = sex_list[p2]
                 mSex = sex_list[p2]
+                viewModel.selectGender(p2)
             }
             R.id.activity_spinner-> {
                // mTvActivityLevel!!.text = activity_list[p2]
                 mActivity = activity_list[p2]
-
+                viewModel.selectActivity(p2)
             }
-           R.id.age_spinner-> {
+            R.id.age_spinner-> {
                // mTvActivityLevel!!.text = activity_list[p2]
-               mAge = age_list[p2]
-
-           }
-           R.id.weight_spinner-> {
-               // mTvActivityLevel!!.text = activity_list[p2]
-               mWeight= weight_list[p2]
-
-           }
-           R.id.feet_spinner-> {
-               // mTvActivityLevel!!.text = activity_list[p2]
-               mHeight= feet_list[p2]
-
-           }
-           R.id.inches_spinner-> {
-               // mTvActivityLevel!!.text = activity_list[p2]
-               mHeight = mHeight + inches_list[p2]
-
-           }
+                mAge = age_list[p2]
+                viewModel.selectAge(mAge!!)
             }
-
+            R.id.weight_spinner-> {
+               // mTvActivityLevel!!.text = activity_list[p2]
+                mWeight= weight_list[p2]
+                viewModel.selectWeight(mWeight!!)
+            }
+            R.id.feet_spinner-> {
+               // mTvActivityLevel!!.text = activity_list[p2]
+                mHeight= feet_list[p2]
+                viewModel.selectHeight(mHeight!![0].digitToInt() * 12)
+            }
+            R.id.inches_spinner-> {
+               // mTvActivityLevel!!.text = activity_list[p2]
+                mHeight = mHeight + inches_list[p2]
+                viewModel.selectHeight((viewModel.state.value?.height ?: 0) + inches_list[p2][0].digitToInt())
+            }
+        }
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
