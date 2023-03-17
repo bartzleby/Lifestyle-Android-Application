@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 
@@ -48,6 +49,7 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
     private var mCity: String? = null
     private var mCountry: String? = null
     private var mHeight: String? = null
+    private var mInches: String? = null
     private var mWeight: Int? = null
     private var mSex: String? = null
     private var mActivity: String? = null
@@ -178,32 +180,27 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
             R.id.sex_spinner-> {
               //  mTvSex!!.text = sex_list[p2]
                 mSex = sex_list[p2]
-                viewModel.selectGender(p2)
             }
             R.id.activity_spinner-> {
                // mTvActivityLevel!!.text = activity_list[p2]
                 mActivity = activity_list[p2]
-                viewModel.selectActivity(p2)
             }
             R.id.age_spinner-> {
                // mTvActivityLevel!!.text = activity_list[p2]
                 mAge = age_list[p2]
-                viewModel.selectAge(mAge!!)
             }
             R.id.weight_spinner-> {
                // mTvActivityLevel!!.text = activity_list[p2]
                 mWeight= weight_list[p2]
-                viewModel.selectWeight(mWeight!!)
             }
             R.id.feet_spinner-> {
                // mTvActivityLevel!!.text = activity_list[p2]
                 mHeight= feet_list[p2]
-                viewModel.selectHeight(mHeight!![0].digitToInt() * 12)
             }
             R.id.inches_spinner-> {
                // mTvActivityLevel!!.text = activity_list[p2]
-                mHeight = mHeight + inches_list[p2]
-                viewModel.selectHeight((viewModel.state.value?.height ?: 0) + inches_list[p2][0].digitToInt())
+                mInches = inches_list[p2]
+                mHeight += mInches
             }
         }
     }
@@ -221,15 +218,14 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
                 mFullName = mTvFullName!!.text.toString()
                 if (mFullName.isNullOrBlank()) {
                     //Complain that there's no text
-                    Toast.makeText(activity, "Enter a name first!", Toast.LENGTH_SHORT)
-                        .show()
-                    Toast.makeText(activity, "this is your height " + mHeight, Toast.LENGTH_SHORT).show()
-                } else { //go to next fragment - bmr
-                    R.id.BmrFragment?.let {
-                        activity!!.supportFragmentManager.commit {
-                            findNavController().navigate(R.id.BmrFragment)
-                        }
-                    }
+                    Snackbar.make(view, "Please enter your full name.", Snackbar.LENGTH_LONG).show()
+                } else {
+                    viewModel.selectGender(sex_list.indexOf(mSex))
+                    viewModel.selectActivity(activity_list.indexOf(mActivity))
+                    viewModel.selectAge(mAge!!)
+                    viewModel.selectWeight(mWeight!!)
+                    viewModel.selectHeight(mHeight!![0].digitToInt() * 12 + mInches!![0].digitToInt())
+                    Snackbar.make(view, "User data saved!", Snackbar.LENGTH_LONG).show()
                 }
 
 
