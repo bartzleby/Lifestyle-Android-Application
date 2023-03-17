@@ -224,7 +224,7 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
                     viewModel.selectActivity(activity_list.indexOf(mActivity))
                     viewModel.selectAge(mAge!!)
                     viewModel.selectWeight(mWeight!!)
-                    viewModel.selectHeight(mHeight!![0].digitToInt() * 12 + mInches!![0].digitToInt())
+                    viewModel.selectHeight(mHeight!![0].digitToInt() * 12 + mInches!!.replace("\"", "").toInt())
                     Snackbar.make(view, "User data saved!", Snackbar.LENGTH_LONG).show()
                 }
 

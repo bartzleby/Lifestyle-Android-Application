@@ -107,24 +107,24 @@
         android:text="Height: "
         android:id="@+id/tv_height"
         />
+
     <Spinner
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_toRightOf="@id/tv_height"
-        android:layout_marginLeft="20dp"
-        android:layout_below="@id/tv_country"
-        android:id="@+id/feet_spinner"
-        />
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/tv_height"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/tv_country"
+            android:id="@+id/feet_spinner" />
+
     <Spinner
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_toRightOf="@id/feet_spinner"
-        android:layout_marginLeft="20dp"
-        android:layout_below="@id/tv_country"
-        android:id="@+id/inches_spinner"
-        />
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/feet_spinner"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/tv_country"
+            android:id="@+id/inches_spinner" />
 
    <!-- <EditText
         android:layout_width="150dp"
@@ -188,14 +188,13 @@
         android:id="@+id/sex_view"
         /> -->
     <Spinner
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_toRightOf="@id/tv_sex"
-        android:layout_marginLeft="20dp"
-        android:layout_below="@id/tv_weight"
-        android:id="@+id/sex_spinner"
-        />
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/tv_sex"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/tv_weight"
+            android:id="@+id/sex_spinner" />
 
     <TextView
         android:layout_width="wrap_content"
