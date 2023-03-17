@@ -13,9 +13,10 @@ enum class Gender {
 
 enum class Activity(val multiplier: Float) {
     SEDENTARY(1.2f),
-    LIGHT(1.45f),
-    MODERATE(1.7f),
-    ACTIVE(1.95f)
+    LIGHT(1.375f),
+    MODERATE(1.55f),
+    VERY_ACTIVE(1.725f),
+    EXTRA_ACTIVE(1.9f)
 }
 
 fun calculateBMR(gender: Gender, age: Int, height: Int, weight: Int): Int {
