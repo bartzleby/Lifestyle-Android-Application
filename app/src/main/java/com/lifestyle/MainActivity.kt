@@ -22,9 +22,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     //private var mButtonRegister: Button? = null
 
-    private fun navigateToFragmentFromItem(itemId: Int): Boolean {
+    private fun navigateToFragmentFromItem(item: MenuItem): Boolean {
         var fragmentId: Int? = null
-        when (itemId) {
+        when (item.itemId) {
             R.id.item_bmr, R.id.action_bmr -> fragmentId = R.id.BmrFragment
             R.id.item_user -> fragmentId = R.id.UserInfo
         }
@@ -42,19 +42,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-
-        binding.toolbar?.let {
-            appBarConfiguration = AppBarConfiguration(navController.graph)
-            setSupportActionBar(binding.toolbar)
-            setupActionBarWithNavController(navController, appBarConfiguration)
+        // Used in tablet layout
+        binding.navigationRail?.let {
+            binding.navigationRail!!.setOnItemSelectedListener { item -> navigateToFragmentFromItem(item) }
         }
 
-        binding.navigationRail?.let {
-//            binding.navigationRail!!.selectedItemId = R.id.item_bmr
-            binding.navigationRail!!.setOnItemSelectedListener { item ->
-                navigateToFragmentFromItem(item.itemId)
-            }
+        // Used in phone layout
+        binding.navigationBar?.let {
+            binding.navigationBar!!.setOnItemSelectedListener { item -> navigateToFragmentFromItem(item) }
         }
 
 //        binding.fabWeather.setOnClickListener { view ->
@@ -72,13 +67,6 @@ class MainActivity : AppCompatActivity() {
             menu.setOptionalIconsVisible(true)
         }
         return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return navigateToFragmentFromItem(item.itemId) or super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {
