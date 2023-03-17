@@ -26,12 +26,27 @@
         </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_weather"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginBottom="16dp"
-            app:srcCompat="@drawable/outline_wb_sunny" />
+        android:id="@+id/fab_hikes_nearby"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="16dp"
+        app:srcCompat="@drawable/baseline_hiking_24"
+        android:contentDescription="@string/fab_find_hikes_nearby"
+        app:useCompatPadding="true" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_weather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="16dp"
+        app:srcCompat="@drawable/outline_wb_sunny"
+        app:layout_anchor="@+id/fab_hikes_nearby"
+        android:contentDescription="@string/fab_weather"
+        app:layout_anchorGravity="top"
+        app:useCompatPadding="true" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

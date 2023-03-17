@@ -1,11 +1,12 @@
 package com.lifestyle
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.fragment.app.commit
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private var findHikesNearMe: String? = "hikes near me"
     //private var mButtonRegister: Button? = null
 
     private fun navigateToFragmentFromItem(item: MenuItem): Boolean {
@@ -45,6 +47,29 @@ class MainActivity : AppCompatActivity() {
         // Used in tablet layout
         binding.navigationRail?.let {
             binding.navigationRail!!.setOnItemSelectedListener { item -> navigateToFragmentFromItem(item) }
+        }
+
+        // When the user clicks on the fabHikesNearby object, Google Maps opens and searches for
+        // "hikes nearby" near the users location
+        binding.fabHikesNearby.setOnClickListener { view ->
+            when (view.id) {
+                R.id.fab_hikes_nearby -> {
+                    // TODO: get user location data. Currently, the user location is hard coded to WEB
+                    val searchUri = Uri.parse("geo:40.767778,-111.845205?q=$findHikesNearMe")
+
+                    // create the mapIntent
+                    val mapIntent = Intent(Intent.ACTION_VIEW, searchUri)
+
+                    // open Google Maps using the mapIntent
+                    try {
+                        startActivity(mapIntent)
+                    } catch (ex: ActivityNotFoundException) {
+                        // If it failed, tell the user
+                        Snackbar.make(view, "Error: Failed to launch Google Maps!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                    }
+                }
+            }
         }
 
         // Used in phone layout

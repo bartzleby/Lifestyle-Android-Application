@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LIfestyle</string>
+    <string name="app_name">Lifestyle</string>
 
     <string name="label_bmr_fragment">BMR</string>
     <string name="label_home_fragment">Home</string>
@@ -14,4 +14,6 @@
     <string name="text_view_bmr_target_calculated">%d calories</string>
 
     <string name="button_register_text">Register</string>
+    <string name="fab_find_hikes_nearby">Find hikes nearby</string>
+    <string name="fab_weather">Find the local weather</string>
 </resources>
