@@ -59,23 +59,31 @@ class BmrFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.state.observe(this, Observer { state ->
-            val gender = Gender.values()[state.gender!!]
-            val age = state.age!!
-            val height = state.height!!
-            val weight = state.weight!!
-            val activity = Activity.values()[state.activity!!]
-            val calculatedBMR: Int = calculateBMR(gender, age, inchesToCentimeters(height), poundsToKilograms(weight))
-            binding.textViewBmrBasePreface.text = getString(R.string.text_view_bmr_base_preface).format(
-                gender,
-                age,
-                "%d'%d\"".format(height / 12, height % 12),
-                weight
-            )
-            binding.textViewBmrTargetPreface.text = getString(R.string.text_view_bmr_target_preface).format(activity)
-            binding.textViewBmrBaseCalculated.text = getString(R.string.text_view_bmr_base_calculated).format(calculatedBMR)
-            binding.textViewBmrTargetCalculated.text = getString(R.string.text_view_bmr_target_calculated).format(
-                (calculatedBMR * activity.multiplier).toInt()
-            )
+            // If any field is null, the user data hasn't been saved successfully (gender was arbitrarily chosen)
+            state.gender?.let {
+                val gender = Gender.values()[state.gender]
+                val age = state.age!!
+                val height = state.height!!
+                val weight = state.weight!!
+                val activity = Activity.values()[state.activity!!]
+                val calculatedBMR: Int = calculateBMR(gender, age, inchesToCentimeters(height), poundsToKilograms(weight))
+                binding.textViewBmrBasePreface.text = getString(R.string.text_view_bmr_base_preface).format(
+                    gender,
+                    age,
+                    "%d'%d\"".format(height / 12, height % 12),
+                    weight
+                )
+                binding.textViewBmrTargetPreface.text = getString(R.string.text_view_bmr_target_preface).format(activity)
+                binding.textViewBmrBaseCalculated.text = getString(R.string.text_view_bmr_base_calculated).format(calculatedBMR)
+                binding.textViewBmrTargetCalculated.text = getString(R.string.text_view_bmr_target_calculated).format(
+                    (calculatedBMR * activity.multiplier).toInt()
+                )
+            } ?: run {
+                binding.textViewBmrBasePreface.text = resources.getString(R.string.text_view_bmr_awaiting_user_data)
+                binding.textViewBmrTargetPreface.text = ""
+                binding.textViewBmrBaseCalculated.text = ""
+                binding.textViewBmrTargetCalculated.text = ""
+            }
         })
     }
 

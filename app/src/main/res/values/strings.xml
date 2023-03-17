@@ -12,6 +12,7 @@
     <string name="text_view_bmr_base_calculated">%d calories</string>
     <string name="text_view_bmr_target_preface">Activity: %s\nYour daily calorie target is</string>
     <string name="text_view_bmr_target_calculated">%d calories</string>
+    <string name="text_view_bmr_awaiting_user_data">(Awaiting user data)</string>
 
     <string name="button_register_text">Register</string>
     <string name="fab_find_hikes_nearby">Find hikes nearby</string>
