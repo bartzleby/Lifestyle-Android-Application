@@ -1,11 +1,12 @@
 package com.lifestyle
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.fragment.app.commit
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private var findHikesNearby: String? = "hikes nearby"
     //private var mButtonRegister: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +43,24 @@ class MainActivity : AppCompatActivity() {
                     .setAction("Action", null).show()
         }
 
+        binding.fabHikesNearby.setOnClickListener { view ->
+                when (view.id) {
+                    R.id.fab_hikes_nearby -> {
+                        val searchUri = Uri.parse("geo:40.767778,-111.845205?q=$findHikesNearby")
+
+                        val mapIntent = Intent(Intent.ACTION_VIEW, searchUri)
+
+                        try {
+                            startActivity(mapIntent)
+                        } catch (ex: ActivityNotFoundException) {
+                            Snackbar.make(view, "Failed to launch Google Maps!", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show()
+                        }
+
+                }
+            }
+        }
+
 
 
 
@@ -48,7 +68,8 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-   /** override fun onClick(view: View) {
+
+/**   override fun onClick(view: View) {
         when (view.id) {
             R.id.button_register -> {
                 val fragment = UserInfo.newInstance();
@@ -58,7 +79,9 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-    } */
+    }
+
+ */
 
 
     @SuppressLint("RestrictedApi")
