@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import java.util.*
 
 
@@ -114,8 +115,7 @@ class UserInfo : Fragment(),  View.OnClickListener {
                     */
                    R.id.BmrFragment?.let {
                        activity!!.supportFragmentManager.commit {
-                           activity!!.findNavController(R.id.user_frag_container)
-                               .navigate(R.id.BmrFragment)
+                           findNavController().navigate(R.id.BmrFragment)
                        }
                    }
                }
