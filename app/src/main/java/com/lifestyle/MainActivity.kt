@@ -49,9 +49,14 @@ class MainActivity : AppCompatActivity() {
             binding.navigationRail!!.setOnItemSelectedListener { item -> navigateToFragmentFromItem(item) }
         }
 
+        // Used in phone layout
+        binding.navigationBar?.let {
+            binding.navigationBar!!.setOnItemSelectedListener { item -> navigateToFragmentFromItem(item) }
+        }
+
         // When the user clicks on the fabHikesNearby object, Google Maps opens and searches for
         // "hikes nearby" near the users location
-        binding.fabHikesNearby.setOnClickListener { view ->
+        binding.fabHikesNearby?.setOnClickListener { view ->
             when (view.id) {
                 R.id.fab_hikes_nearby -> {
                     // TODO: get user location data. Currently, the user location is hard coded to WEB
@@ -72,10 +77,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Used in phone layout
-        binding.navigationBar?.let {
-            binding.navigationBar!!.setOnItemSelectedListener { item -> navigateToFragmentFromItem(item) }
-        }
 
 //        binding.fabWeather.setOnClickListener { view ->
 //            Snackbar.make(view, "Missing location info", Snackbar.LENGTH_LONG)
