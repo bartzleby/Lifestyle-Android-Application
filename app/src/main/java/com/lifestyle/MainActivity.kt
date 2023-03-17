@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private var findHikesNearby: String? = "hikes nearby"
+    private var findHikesNearMe: String? = "hikes near me"
     //private var mButtonRegister: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,17 +43,23 @@ class MainActivity : AppCompatActivity() {
                     .setAction("Action", null).show()
         }
 
+        // When the user clicks on the fabHikesNearby object, Google Maps opens and searches for
+        // "hikes nearby" near the users location
         binding.fabHikesNearby.setOnClickListener { view ->
                 when (view.id) {
                     R.id.fab_hikes_nearby -> {
-                        val searchUri = Uri.parse("geo:40.767778,-111.845205?q=$findHikesNearby")
+                        // TODO: get user location data. Currently, the user location is hard coded to WEB
+                        val searchUri = Uri.parse("geo:40.767778,-111.845205?q=$findHikesNearMe")
 
+                        // create the mapIntent
                         val mapIntent = Intent(Intent.ACTION_VIEW, searchUri)
 
+                        // open Google Maps using the mapIntent
                         try {
                             startActivity(mapIntent)
                         } catch (ex: ActivityNotFoundException) {
-                            Snackbar.make(view, "Failed to launch Google Maps!", Snackbar.LENGTH_LONG)
+                            // If it failed, tell the user
+                            Snackbar.make(view, "Error: Failed to launch Google Maps!", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show()
                         }
 
