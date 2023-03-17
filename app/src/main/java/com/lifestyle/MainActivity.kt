@@ -46,23 +46,22 @@ class MainActivity : AppCompatActivity() {
         // When the user clicks on the fabHikesNearby object, Google Maps opens and searches for
         // "hikes nearby" near the users location
         binding.fabHikesNearby.setOnClickListener { view ->
-                when (view.id) {
-                    R.id.fab_hikes_nearby -> {
-                        // TODO: get user location data. Currently, the user location is hard coded to WEB
-                        val searchUri = Uri.parse("geo:40.767778,-111.845205?q=$findHikesNearMe")
+            when (view.id) {
+                R.id.fab_hikes_nearby -> {
+                    // TODO: get user location data. Currently, the user location is hard coded to WEB
+                    val searchUri = Uri.parse("geo:40.767778,-111.845205?q=$findHikesNearMe")
 
-                        // create the mapIntent
-                        val mapIntent = Intent(Intent.ACTION_VIEW, searchUri)
+                    // create the mapIntent
+                    val mapIntent = Intent(Intent.ACTION_VIEW, searchUri)
 
-                        // open Google Maps using the mapIntent
-                        try {
-                            startActivity(mapIntent)
-                        } catch (ex: ActivityNotFoundException) {
-                            // If it failed, tell the user
-                            Snackbar.make(view, "Error: Failed to launch Google Maps!", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show()
-                        }
-
+                    // open Google Maps using the mapIntent
+                    try {
+                        startActivity(mapIntent)
+                    } catch (ex: ActivityNotFoundException) {
+                        // If it failed, tell the user
+                        Snackbar.make(view, "Error: Failed to launch Google Maps!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                    }
                 }
             }
         }
