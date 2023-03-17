@@ -72,7 +72,7 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
    // private var mDisplayIntent: Intent? = null
     private val sex_list : List<String> = listOf("Male", "Female")
     private val activity_list : List<String> = listOf("Sedentary", "Lightly Active", "Moderately Active", "Very Active", "Extra Active")
-    private val  age_list = (13.. 100).toList()
+    private val  age_list = (13.. 99).toList()
     private val weight_list = (85.. 500).toList()
     private val feet_list : List<String> = listOf("1'", "2'", "3'", "4'", "5'", "6'", "7'")
     private val inches_list : List<String> = listOf("0\"", "1\"", "2\"", "3\"", "4\"", "5\"", "6\"", "7\"", "8\"", "9\"", "10\"", "11\"")
@@ -134,35 +134,35 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
         weightSpinner = view.findViewById(R.id.weight_spinner)
         weightSpinner!!.setOnItemSelectedListener(this)
         val ad2 = ArrayAdapter(view.context, android.R.layout.simple_spinner_item, weight_list)
-        ad.setDropDownViewResource(android.R.layout.select_dialog_item)
+        ad2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         weightSpinner!!.setAdapter(ad2)
 
         //activity drop down
         activitySpinner = view.findViewById(R.id.activity_spinner)
         activitySpinner!!.setOnItemSelectedListener(this)
         val ad3 = ArrayAdapter(view.context, android.R.layout.simple_spinner_item, activity_list)
-        ad2.setDropDownViewResource(android.R.layout.select_dialog_item)
+        ad3.setDropDownViewResource(android.R.layout.select_dialog_item)
         activitySpinner!!.setAdapter(ad3)
 
         //age drop down
         ageSpinner = view.findViewById(R.id.age_spinner)
         ageSpinner!!.setOnItemSelectedListener(this)
         val ad4 = ArrayAdapter(view.context, android.R.layout.simple_spinner_item, age_list)
-        ad2.setDropDownViewResource(android.R.layout.select_dialog_item)
+        ad4.setDropDownViewResource(android.R.layout.select_dialog_item)
         ageSpinner!!.setAdapter(ad4)
 
         //feet drop down
         feetSpinner = view.findViewById(R.id.feet_spinner)
         feetSpinner!!.setOnItemSelectedListener(this)
         val ad5 = ArrayAdapter(view.context, android.R.layout.simple_spinner_item, feet_list)
-        ad2.setDropDownViewResource(android.R.layout.select_dialog_item)
+        ad5.setDropDownViewResource(android.R.layout.select_dialog_item)
         feetSpinner!!.setAdapter(ad5)
 
         //feet drop down
         inchSpinner = view.findViewById(R.id.inches_spinner)
         inchSpinner!!.setOnItemSelectedListener(this)
         val ad6 = ArrayAdapter(view.context, android.R.layout.simple_spinner_item, inches_list)
-        ad2.setDropDownViewResource(android.R.layout.select_dialog_item)
+        ad6.setDropDownViewResource(android.R.layout.select_dialog_item)
         inchSpinner!!.setAdapter(ad6)
 
 
