@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LIfestyle</string>
+    <string name="app_name">Lifestyle</string>
 
     <string name="label_bmr_fragment">BMR</string>
     <string name="label_home_fragment">Home</string>
