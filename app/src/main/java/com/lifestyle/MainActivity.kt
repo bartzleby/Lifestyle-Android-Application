@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
             binding.navigationBar!!.setOnItemSelectedListener { item -> navigateToFragmentFromItem(item) }
         }
 
-        binding.fabLocation.setOnClickListener { view ->
+        binding.fabLocation?.setOnClickListener { view ->
             when (view.id) {
                 R.id.fab_location -> {
                     requestLocationPermission(view, "rGeocode")
