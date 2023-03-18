@@ -19,4 +19,5 @@
     <string name="fab_weather">Find the local weather</string>
     <string name="label_weather_fragment">Weather</string>
     <string name="hello_weather_fragment">Weather</string>
+    <string name="fab_location">Look up your location</string>
 </resources>
