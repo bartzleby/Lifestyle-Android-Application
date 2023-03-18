@@ -119,7 +119,7 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        mIvPic!!.drawable?.let {
+        mIvPic?.drawable?.let {
             outState.putParcelable("bitmap", mThumbnailImage)
         }
     }
