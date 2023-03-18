@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
@@ -47,7 +48,7 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
     private var mFullName: String? = null
     private var mAge: Int? = null
     private var mCity: String? = null
-    private var mCountry: String? = null
+    private var mCountry: String? = "United States"
     private var mHeight: String? = null
     private var mInches: String? = null
     private var mWeight: Int? = null
@@ -55,6 +56,8 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
     private var mActivity: String? = null
 
     private var mTvFullName: TextView? = null
+    private var mTvCity: TextView? = null
+    private var mTvCountry: TextView? = null
     //private var mEtFullName: EditText? = null
    // private var mTvAge: TextView? = null
   //  private var mTvCity: TextView? = null
@@ -82,13 +85,34 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
     private val weight_list = (85.. 500).toList()
     private val feet_list : List<String> = listOf("1'", "2'", "3'", "4'", "5'", "6'", "7'")
     private val inches_list : List<String> = listOf("0\"", "1\"", "2\"", "3\"", "4\"", "5\"", "6\"", "7\"", "8\"", "9\"", "10\"", "11\"")
-
+    private val city_list : List<String> = listOf("Salt Lake City", "Austin", "Seattle", "San Fransisco", "New York", "Denver", "Los Angeles", "Portland", "Boston")
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
     //    arguments?.let {
        //     param1 = it.getString(ARG_PARAM1)
      //       param2 = it.getString(ARG_PARAM2)
      //   }
+        /*setFragmentResultListener("requestLocation") { key, bundle ->
+            // Any type can be passed via to the bundle
+
+          /*  mCity = bundle!!.getString("CITY_DATA")
+            mCountry = bundle.getString("COUNTRY_DATA")
+            // val result = bundle.getString("data")
+            // Do something with the result...
+            if (mCity != null) {
+                mTvCity!!.text = mCity
+            }
+            if (mCountry != null) {
+                mTvCountry!!.text = mCountry
+            }
+
+           */
+            // Snackbar.make(acti, "User data saved!", Snackbar.LENGTH_LONG).show()
+
+        }*/
+
+
 
     }
 
@@ -103,8 +127,18 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
         mButtonSubmit = view.findViewById(R.id.button_submit)
         mButtonCamera = view.findViewById(R.id.button_take_pic)
         mTvFullName = view.findViewById(R.id.name)
+      /*  mTvCity = view.findViewById(R.id.city)
+        mTvCountry = view.findViewById(R.id.country)*/
         mButtonSubmit!!.setOnClickListener(this)
         mButtonCamera!!.setOnClickListener(this)
+
+/*
+        if (mCity != null) {
+            mTvCity!!.text = mCity
+        }
+        if (mCountry != null) {
+            mTvCountry!!.text = mCountry
+        }*/
         // mTvSex = view.findViewById(R.id.sex_view)
         //mTvActivityLevel = view.findViewById(R.id.activity_level_view)
 
@@ -171,11 +205,20 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
         inchSpinner!!.setAdapter(ad6)
 
 
+        //city drop down
+        inchSpinner = view.findViewById(R.id.city_spinner)
+        inchSpinner!!.setOnItemSelectedListener(this)
+        val ad7 = ArrayAdapter(view.context, android.R.layout.simple_spinner_item, city_list)
+        ad6.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        inchSpinner!!.setAdapter(ad7)
+
+
         return view
 
     }
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         //Toast.makeText(view!!.context, items[p2], Toast.LENGTH_SHORT).show();
+
         when (p0!!.id) {
             R.id.sex_spinner-> {
               //  mTvSex!!.text = sex_list[p2]
@@ -202,6 +245,11 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
                 mInches = inches_list[p2]
                 mHeight += mInches
             }
+            /*
+            R.id.city_spinner-> {
+                // mTvActivityLevel!!.text = activity_list[p2]
+                mCity = city_list[p2]
+            }*/
         }
     }
 
@@ -227,6 +275,7 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
                     viewModel.selectWeight(mWeight!!)
                     viewModel.selectHeight(mHeight!![0].digitToInt() * 12 + mInches!!.replace("\"", "").toInt())
                     Snackbar.make(view, "User data saved!", Snackbar.LENGTH_LONG).show()
+                    //Instantiate the fragment
                 }
 
 

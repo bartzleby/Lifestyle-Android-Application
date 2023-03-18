@@ -69,32 +69,43 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tv_age"
         android:layout_marginTop="20dp"
-        android:text="City:"
+        android:text="City: "
         android:id="@+id/tv_city"
         />
 
-
-    <EditText
-        android:layout_width="150dp"
+  <Spinner
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/tv_city"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/tv_age"
+        android:id="@+id/city_spinner" />
+  <!--<TextView
+        android:layout_width="400dp"
+        android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/tv_city"
         android:layout_below="@id/tv_age"
+        android:text="Click the Location Button to get your current City "
         android:id="@+id/city"
-        />
+        /> -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tv_city"
         android:layout_marginTop="20dp"
-        android:text="Country:"
+        android:text="Country: "
         android:id="@+id/tv_country"
         />
-    <EditText
-        android:layout_width="150dp"
+    <TextView
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/tv_country"
         android:layout_below="@id/tv_city"
+        android:layout_marginTop="20dp"
+        android:text="United States"
         android:id="@+id/country"
         />
 
