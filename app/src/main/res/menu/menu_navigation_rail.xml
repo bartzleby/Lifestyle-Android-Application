@@ -10,4 +10,9 @@
                 android:enabled="true"
                 android:icon="@drawable/outline_calculate"
                 android:title="@string/label_bmr_fragment"/>
+        <item
+                android:id="@+id/WeatherFragment"
+                android:enabled="true"
+                android:icon="@drawable/outline_wb_sunny"
+                android:title="@string/label_weather_fragment"/>
 </menu>

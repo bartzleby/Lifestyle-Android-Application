@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.BmrFragment -> fragmentId = R.id.BmrFragment
             R.id.UserInfo -> fragmentId = R.id.UserInfo
+            R.id.WeatherFragment -> fragmentId = R.id.WeatherFragment
         }
         fragmentId?.let {
             supportFragmentManager.commit {
@@ -109,14 +110,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.fabWeather?.setOnClickListener { view ->
-            Snackbar.make(view, "Missing location info", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-
-            supportFragmentManager.commit {
-                findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.WeatherFragment)
-            }
-        }
 
         // When the user clicks on the fabHikesNearby object, Google Maps opens and searches for
         // "hikes nearby" near the users location
