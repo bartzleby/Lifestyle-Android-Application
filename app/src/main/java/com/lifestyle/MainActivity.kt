@@ -52,6 +52,8 @@ class MainActivity : AppCompatActivity() {
     private var country: String? = null
     private var address: String? = null
 
+    private var locationShared: Boolean? = null
+
     private lateinit var geocoder: Geocoder
 
     private val requestPermissionLauncher =
@@ -73,7 +75,13 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.BmrFragment -> fragmentId = R.id.BmrFragment
             R.id.UserInfo -> fragmentId = R.id.UserInfo
-            R.id.WeatherFragment -> fragmentId = R.id.WeatherFragment
+            R.id.WeatherFragment -> {
+                if (locationShared!!) {
+                    fragmentId = R.id.WeatherFragment
+                } else {
+                    Toast.makeText(this, "Please share your location to access weather", Toast.LENGTH_LONG).show()
+                }
+            }
         }
         fragmentId?.let {
             supportFragmentManager.commit {
@@ -85,6 +93,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        locationShared = false
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -110,16 +120,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         // When the user clicks on the fabHikesNearby object, Google Maps opens and searches for
         // "hikes nearby" near the users location
         binding.fabHikesNearby?.setOnClickListener { view ->
             when (view.id) {
                 R.id.fab_hikes_nearby -> {
-                    requestLocationPermission(view, "hike")
+                    if (locationShared!!) {
+                        requestLocationPermission(view, "hike")
+                    }
+                    else {
+                        Toast.makeText(this, "Please share your location to find hikes near you", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }
+
     }
 
     private fun requestLocationPermission(view: View, action: String) {
@@ -206,6 +221,8 @@ class MainActivity : AppCompatActivity() {
             1,
             geocodeListener
         )
+
+        locationShared = true
     }
 
 
