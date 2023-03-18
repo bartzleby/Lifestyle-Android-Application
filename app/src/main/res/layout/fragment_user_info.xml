@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="20dp"
+    tools:context=".UserInfo">
+
+    <ImageView
+        android:id="@+id/iv_pic"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:adjustViewBounds="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="20dp"
+        android:text="Name: "
+        android:id="@+id/tv_name"
+        />
+
+    <EditText
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_name"
+        android:id="@+id/name"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tv_name"
+        android:layout_marginTop="20dp"
+        android:text="Age:"
+        android:id="@+id/tv_age"
+        />
+   <!-- <NumberPicker
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_toRightOf="@id/tv_age"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/tv_name"
+        android:id="@+id/number_picker_age"
+        ></NumberPicker> -->
+    <Spinner
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/tv_age"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/tv_name"
+        android:id="@+id/age_spinner"
+        />
+   <!-- <EditText
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_age"
+        android:layout_below="@id/tv_name"
+        android:id="@+id/age"
+        />
+        -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tv_age"
+        android:layout_marginTop="20dp"
+        android:text="City:"
+        android:id="@+id/tv_city"
+        />
+
+
+    <EditText
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_city"
+        android:layout_below="@id/tv_age"
+        android:id="@+id/city"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tv_city"
+        android:layout_marginTop="20dp"
+        android:text="Country:"
+        android:id="@+id/tv_country"
+        />
+    <EditText
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_country"
+        android:layout_below="@id/tv_city"
+        android:id="@+id/country"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tv_country"
+        android:layout_marginTop="20dp"
+        android:text="Height: "
+        android:id="@+id/tv_height"
+        />
+
+    <Spinner
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/tv_height"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/tv_country"
+            android:id="@+id/feet_spinner" />
+
+    <Spinner
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/feet_spinner"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/tv_country"
+            android:id="@+id/inches_spinner" />
+
+   <!-- <EditText
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_height"
+        android:layout_below="@id/tv_country"
+        android:id="@+id/height"
+        /> -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toRightOf="@id/tv_weight"
+        android:layout_below="@+id/tv_height"
+        android:layout_marginTop="20dp"
+        android:text="Weight:"
+        android:id="@+id/tv_weight"
+        />
+  <!--  <NumberPicker
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_toRightOf="@id/tv_weight"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/tv_height"
+        android:id="@+id/number_picker_weight"
+
+        ></NumberPicker> -->
+    <Spinner
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/tv_weight"
+        android:layout_marginLeft="20dp"
+        android:layout_below="@id/tv_height"
+        android:id="@+id/weight_spinner"
+        />
+  <!--  <EditText
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_weight"
+        android:layout_below="@id/tv_height"
+        android:id="@+id/weight"
+        /> -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tv_weight"
+        android:layout_marginTop="20dp"
+        android:text="Sex:"
+        android:id="@+id/tv_sex"
+        />
+
+  <!--  <TextView
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_sex"
+        android:layout_below="@id/tv_weight"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/sex_view"
+        /> -->
+    <Spinner
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/tv_sex"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/tv_weight"
+            android:id="@+id/sex_spinner" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tv_sex"
+        android:layout_marginTop="20dp"
+        android:text="Activity Level:"
+        android:id="@+id/tv_activity_level"
+        />
+ <!--   <TextView
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_activity_level"
+        android:layout_below="@id/tv_sex"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/activity_level_view"
+        /> -->
+
+    <Spinner
+        android:id="@+id/activity_spinner"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_sex"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="70dp"
+        android:layout_toRightOf="@id/tv_sex" />
+    <Button
+        android:id="@+id/button_take_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_below="@id/tv_activity_level"
+        android:layout_marginTop="30dp"
+        android:text="Take Profile Picture" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:text="submit"
+        android:id="@+id/button_submit"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentBottom="true"
+        />
+
+
+</RelativeLayout>
+
+
