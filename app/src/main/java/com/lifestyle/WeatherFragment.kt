@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -20,6 +21,9 @@ class WeatherFragment : Fragment() {
     private val client = OkHttpClient()
     private val baseUrl = "https://api.tomorrow.io/v4/weather/realtime"
     private val wapikey: String = BuildConfig.WAPI_KEY
+
+    private lateinit var tv_temp: TextView
+
     private var _binding: FragmentWeatherBinding? = null
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -34,6 +38,7 @@ class WeatherFragment : Fragment() {
         val view = binding.root
 
         val btnFetchWeather = view.findViewById<View>(R.id.button_fetch_weather) as Button
+        tv_temp = view.findViewById(R.id.tv_temperature)
 
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(getActivity()!!.applicationContext)
@@ -98,6 +103,12 @@ class WeatherFragment : Fragment() {
         return false
     }
 
+    fun Fragment?.runOnUiThread(action: () -> Unit) {
+        this ?: return
+        if (!isAdded) return // Fragment not attached to an Activity
+        activity?.runOnUiThread(action)
+    }
+
     private fun fetchWeather(location: String): String {
         val url =
             "$baseUrl?location=$location&apikey=$wapikey"
@@ -113,7 +124,10 @@ class WeatherFragment : Fragment() {
                 val gson = GsonBuilder().create()
                 val weatherInfo = gson.fromJson(resbody, TomorrowResponse::class.java)
 
-                println(resbody)
+//                println(resbody)
+                runOnUiThread {
+                    tv_temp.text = weatherInfo.data.values.temperature.toString()
+                }
             }
         })
 
