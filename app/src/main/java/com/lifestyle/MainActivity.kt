@@ -25,7 +25,6 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -149,7 +148,7 @@ class MainActivity : AppCompatActivity() {
                                 findHikesNearby(view)
                             }
                             else if (action.equals("rGeocode")) {
-                                fetchCityAndCountry()
+                                getCityAndCountry()
                             }
                             else if (action.equals("weather")) {
                                 getWeather()
@@ -195,7 +194,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun fetchCityAndCountry() {
+    private fun getCityAndCountry() {
         val geocodeListener = Geocoder.GeocodeListener { addresses ->
             country = addresses[0].countryName
             city = addresses[0].locality
