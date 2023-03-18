@@ -116,6 +116,23 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
 
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        mIvPic!!.drawable?.let {
+            outState.putParcelable("bitmap", mThumbnailImage)
+        }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        val savedBitmap = savedInstanceState?.getParcelable("bitmap", Bitmap::class.java)
+        val bitmap = mThumbnailImage
+        if (savedBitmap != null || bitmap != null) {
+            mIvPic!!.setImageBitmap(savedBitmap ?: bitmap)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -127,6 +144,7 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
         mButtonSubmit = view.findViewById(R.id.button_submit)
         mButtonCamera = view.findViewById(R.id.button_take_pic)
         mTvFullName = view.findViewById(R.id.name)
+        mIvPic = view.findViewById(R.id.iv_pic)
       /*  mTvCity = view.findViewById(R.id.city)
         mTvCountry = view.findViewById(R.id.country)*/
         mButtonSubmit!!.setOnClickListener(this)
@@ -295,7 +313,6 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
     private val cameraActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                mIvPic = view!!.findViewById(R.id.iv_pic) as ImageView
                 val extras = result.data!!.extras
                 mThumbnailImage = extras!!["data"] as Bitmap?
 
