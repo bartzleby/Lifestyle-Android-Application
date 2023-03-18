@@ -1,7 +1,5 @@
 package com.lifestyle
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.GsonBuilder
@@ -43,7 +40,7 @@ class WeatherFragment : Fragment() {
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(getActivity()!!.applicationContext)
 
-        val location = getCurrentLocation()
+        val location = "40.75872069597532,-73.98529171943665"
 
         btnFetchWeather.setOnClickListener {
             fetchWeather(location)
@@ -52,64 +49,13 @@ class WeatherFragment : Fragment() {
         return view
     }
 
-    private fun getCurrentLocation(): String {
-
-        if (checkPermissions()) {
-            if (isLocationEnabled()) {
-
-            } else {
-                // open settings
-            }
-
-        } else {
-            requestPermission()
-        }
-
-        return "40.75872069597532,-73.98529171943665"
-    }
-
-    companion object {
-        private const val PERMISSION_REQUEST_ACCESS_LOCATION = 1
-    }
-
-    private fun checkPermissions(): Boolean {
-        if (
-            ActivityCompat.checkSelfPermission(
-                getActivity()!!.applicationContext, Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-            == PackageManager.PERMISSION_GRANTED
-            &&
-            ActivityCompat.checkSelfPermission(
-                getActivity()!!.applicationContext, Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            == PackageManager.PERMISSION_GRANTED
-        ) {
-            return true
-        }
-        return false
-    }
-
-    private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            getActivity()!!,
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ), PERMISSION_REQUEST_ACCESS_LOCATION
-        )
-    }
-
-    private fun isLocationEnabled(): Boolean {
-        return false
-    }
-
     fun Fragment?.runOnUiThread(action: () -> Unit) {
         this ?: return
         if (!isAdded) return // Fragment not attached to an Activity
         activity?.runOnUiThread(action)
     }
 
-    private fun fetchWeather(location: String): String {
+    private fun fetchWeather(location: String) {
         val url =
             "$baseUrl?location=$location&apikey=$wapikey"
         val request = Request.Builder().url(url).build()
@@ -130,16 +76,6 @@ class WeatherFragment : Fragment() {
                 }
             }
         })
-
-        return "fetched"
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onDestroyView() {
