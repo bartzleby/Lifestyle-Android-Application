@@ -34,6 +34,7 @@
             app:elevation="0dp"
             app:srcCompat="@drawable/baseline_hiking_24" />
 
+    <!--    TODO: detect whether currently displaying weather fragment-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_weather"
             android:layout_width="wrap_content"

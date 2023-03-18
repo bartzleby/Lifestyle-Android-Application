@@ -81,10 +81,14 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-//        binding.fabWeather.setOnClickListener { view ->
-//            Snackbar.make(view, "Missing location info", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show()
-//        }
+        binding.fabWeather?.setOnClickListener { view ->
+            Snackbar.make(view, "Missing location info", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+
+            supportFragmentManager.commit {
+                findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.WeatherFragment)
+            }
+        }
     }
 
     @SuppressLint("RestrictedApi")
