@@ -9,6 +9,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SharedViewState(
+    val name: String? = null,
     val gender: Int? = null,
     val age: Int? = null,
     val height: Int? = null,
@@ -22,6 +23,10 @@ class SharedViewModel(private val savedState: SavedStateHandle) : ViewModel() {
     // Repetition is ugly, but the alternative (reflection) is even uglier ¯\_(ツ)_/¯
     // https://stackoverflow.com/questions/70498362/specify-field-to-copy-in-data-classes-kotlin
     // Also see https://stackoverflow.com/questions/61166786/how-to-save-livedata-into-savestatehandle for SavedStateHandle info
+
+    fun selectName(value: String) {
+        savedState["state"] = state.value?.copy(name = value)
+    }
 
     fun selectGender(index: Int) {
         savedState["state"] = state.value?.copy(gender = index)

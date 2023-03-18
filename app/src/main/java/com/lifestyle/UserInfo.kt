@@ -220,6 +220,7 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
                     //Complain that there's no text
                     Snackbar.make(view, "Please enter your full name.", Snackbar.LENGTH_LONG).show()
                 } else {
+                    viewModel.selectName(mFullName!!)
                     viewModel.selectGender(sex_list.indexOf(mSex))
                     viewModel.selectActivity(activity_list.indexOf(mActivity))
                     viewModel.selectAge(mAge!!)
