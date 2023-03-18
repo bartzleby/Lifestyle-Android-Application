@@ -5,8 +5,10 @@ import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -30,6 +32,7 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.lifestyle.databinding.ActivityMainBinding
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,6 +48,12 @@ class MainActivity : AppCompatActivity() {
 //    private var locationData: LocationData? = null
     private var longitude: Double? = null
     private var latitude: Double? = null
+
+    private var city: String? = null
+    private var country: String? = null
+
+    private lateinit var geocoder: Geocoder
+    private var geocoderResult: String? = null
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -152,6 +161,7 @@ class MainActivity : AppCompatActivity() {
             ) == PackageManager.PERMISSION_GRANTED -> {
                 // Permission is granted, set it
                 fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+                geocoder = Geocoder(this, Locale.getDefault())
                 fusedLocationProviderClient.lastLocation
                     .addOnSuccessListener { location: Location? ->
                         if (location != null) {
@@ -170,6 +180,18 @@ class MainActivity : AppCompatActivity() {
                             println("Longitude = " + location.longitude)
 
                             findHikesNearby(view)
+
+                            val geocodeListener = Geocoder.GeocodeListener { addresses ->
+                                country = addresses[0].countryName
+                                city = addresses[0].locality
+
+                                println("reverse geocoding results:")
+                                println("city: " + city)
+                                println("country: " + country)
+                            }
+                            if (Build.VERSION.SDK_INT >= 33) {
+                                geocoder.getFromLocation(latitude!!, longitude!!, 1, geocodeListener)
+                            }
                         }
 
                     }
