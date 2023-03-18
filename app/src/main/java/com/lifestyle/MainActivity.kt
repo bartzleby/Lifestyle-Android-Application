@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.NonNull
@@ -25,6 +26,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.lifestyle.databinding.ActivityMainBinding
@@ -40,8 +42,9 @@ class MainActivity : AppCompatActivity() {
 
     // FusedLocationProviderClient - Main class for receiving location updates.
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private var userLongitude: Double? = null
-    private var userLatitude: Double? = null
+//    private var locationData: LocationData? = null
+    private var longitude: Double? = null
+    private var latitude: Double? = null
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -72,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+//        locationData = new LocationData()
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -106,31 +110,33 @@ class MainActivity : AppCompatActivity() {
 
                     /** This block is what is intended to be used... */
                     // Request the users location
-                    requestLocationPermission()
+                    requestLocationPermission(view)
 
-                    if (isLocationPermissionGranted()) {
-                        // This is the hardcoded WEB location, for testing
-//                        val searchUri = Uri.parse("geo:40.767778,-111.845205?q=$findHikesNearMe")
-                        // hard coded to NYC
-                        val searchUri = Uri.parse("geo:40.7128,74.0060?q=$findHikesNearMe")
-//                        val searchUri = Uri.parse("geo:$userLatitude,$userLongitude?q=$findHikesNearMe")
-
-                        // create the mapIntent
-                        val mapIntent = Intent(Intent.ACTION_VIEW, searchUri)
-
-                        // open Google Maps using the mapIntent
-                        try {
-                            startActivity(mapIntent)
-                        } catch (ex: ActivityNotFoundException) {
-                            // If it failed, tell the user
-                            Snackbar.make(view, "Error: Failed to launch Google Maps!", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show()
-                        }
-                    }
-                    else {
-                        Snackbar.make(view, "Please enable location permissions to find hikes near you.", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show()
-                    }
+//                    if (isLocationPermissionGranted()) {
+//                        // This is the hardcoded WEB location, for testing
+////                        val searchUri = Uri.parse("geo:40.767778,-111.845205?q=$findHikesNearMe")
+//                        val searchUri = Uri.parse("geo:${latitude},${longitude}?q=$findHikesNearMe")
+//
+//                        println("Opening maps, data is...")
+//                        println("Latitude = " + latitude)
+//                        println("Longitude = " + longitude)
+//
+//                        // create the mapIntent
+//                        val mapIntent = Intent(Intent.ACTION_VIEW, searchUri)
+//
+//                        // open Google Maps using the mapIntent
+//                        try {
+//                            startActivity(mapIntent)
+//                        } catch (ex: ActivityNotFoundException) {
+//                            // If it failed, tell the user
+//                            Snackbar.make(view, "Error: Failed to launch Google Maps!", Snackbar.LENGTH_LONG)
+//                                .setAction("Action", null).show()
+//                        }
+//                    }
+//                    else {
+//                        Snackbar.make(view, "Please enable location permissions to find hikes near you.", Snackbar.LENGTH_LONG)
+//                            .setAction("Action", null).show()
+//                    }
 
                     /** ...end of blocks to be tested against... */
                 }
@@ -138,7 +144,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun requestLocationPermission() {
+    private fun requestLocationPermission(view: View) {
         when {
             ContextCompat.checkSelfPermission(
                 this,
@@ -148,11 +154,24 @@ class MainActivity : AppCompatActivity() {
                 fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
                 fusedLocationProviderClient.lastLocation
                     .addOnSuccessListener { location: Location? ->
-
                         if (location != null) {
-                            userLatitude = location.latitude
-                            userLongitude = location.longitude
+                            println("Before setting data...")
+                            println("Latitude = " + latitude)
+                            println("Longitude = " + longitude)
+
+                            latitude  = location.latitude
+                            longitude = location.longitude
+
+                            println("After setting data...")
+                            println("Latitude = " + latitude)
+                            println("Longitude = " + longitude)
+                            println("Raw data...")
+                            println("Latitude = " + location.latitude)
+                            println("Longitude = " + location.longitude)
+
+                            findHikesNearby(view)
                         }
+
                     }
             }
             ActivityCompat.shouldShowRequestPermissionRationale(
@@ -184,6 +203,37 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
+    }
+
+
+    private fun findHikesNearby(view: View) {
+        if (isLocationPermissionGranted()) {
+            // This is the hardcoded WEB location, for testing
+//                        val searchUri = Uri.parse("geo:40.767778,-111.845205?q=$findHikesNearMe")
+            val searchUri = Uri.parse("geo:${latitude},${longitude}?q=$findHikesNearMe")
+
+            println("Opening maps, data is...")
+            println("Latitude = " + latitude)
+            println("Longitude = " + longitude)
+
+            // create the mapIntent
+            val mapIntent = Intent(Intent.ACTION_VIEW, searchUri)
+
+            // open Google Maps using the mapIntent
+            try {
+                startActivity(mapIntent)
+            } catch (ex: ActivityNotFoundException) {
+                // If it failed, tell the user
+                Snackbar.make(view, "Error: Failed to launch Google Maps!", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+            }
+        }
+        else {
+            Snackbar.make(view, "Please enable location permissions to find hikes near you.", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+        }
+
+
     }
 
     private fun isLocationPermissionGranted(): Boolean {
