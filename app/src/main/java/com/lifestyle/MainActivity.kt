@@ -21,10 +21,12 @@ import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.commit
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var findHikesNearMe: String? = "hikes near me"
     //private var mButtonRegister: Button? = null
+    private var navController: NavController? = null
 
     private var COARSE_LOCATION_REQUEST: Int = 100
 
@@ -68,12 +71,12 @@ class MainActivity : AppCompatActivity() {
     private fun navigateToFragmentFromItem(item: MenuItem): Boolean {
         var fragmentId: Int? = null
         when (item.itemId) {
-            R.id.item_bmr, R.id.action_bmr -> fragmentId = R.id.BmrFragment
-            R.id.item_user -> fragmentId = R.id.UserInfo
+            R.id.BmrFragment -> fragmentId = R.id.BmrFragment
+            R.id.UserInfo -> fragmentId = R.id.UserInfo
         }
         fragmentId?.let {
             supportFragmentManager.commit {
-                findNavController(R.id.nav_host_fragment_content_main).navigate(fragmentId)
+                navController!!.navigate(fragmentId)
             }
         }
         return fragmentId != null
@@ -84,15 +87,18 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        navController = findNavController(R.id.nav_host_fragment_content_main)
 
         // Used in tablet layout
         binding.navigationRail?.let {
             binding.navigationRail!!.setOnItemSelectedListener { item -> navigateToFragmentFromItem(item) }
+            binding.navigationRail!!.setupWithNavController(navController!!)
         }
 
         // Used in phone layout
         binding.navigationBar?.let {
             binding.navigationBar!!.setOnItemSelectedListener { item -> navigateToFragmentFromItem(item) }
+            binding.navigationBar!!.setupWithNavController(navController!!)
         }
 
         binding.fabLocation?.setOnClickListener { view ->
