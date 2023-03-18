@@ -17,6 +17,12 @@
             tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/UserInfo"
+        android:name="com.lifestyle.UserInfo"
+        android:label="@string/label_home_fragment"
+        tools:layout="@layout/fragment_user_info" />
+
+    <fragment
         android:id="@+id/WeatherFragment"
         android:name="com.lifestyle.WeatherFragment"
         android:label="@string/label_weather_fragment"

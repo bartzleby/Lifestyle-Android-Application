@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.lifestyle.databinding.FragmentBmrBinding
 
 enum class Gender {
@@ -13,9 +15,10 @@ enum class Gender {
 
 enum class Activity(val multiplier: Float) {
     SEDENTARY(1.2f),
-    LIGHT(1.45f),
-    MODERATE(1.7f),
-    ACTIVE(1.95f)
+    LIGHT_ACTIVE(1.375f),
+    MODERATE_ACTIVE(1.55f),
+    VERY_ACTIVE(1.725f),
+    EXTRA_ACTIVE(1.9f)
 }
 
 fun calculateBMR(gender: Gender, age: Int, height: Int, weight: Int): Int {
@@ -28,16 +31,21 @@ fun calculateBMR(gender: Gender, age: Int, height: Int, weight: Int): Int {
     }
 }
 
+fun inchesToCentimeters(inches: Int): Int {
+    return (inches * 2.54).toInt()
+}
+
+fun poundsToKilograms(pounds: Int): Int {
+    return (pounds / 2.205).toInt()
+}
+
 class BmrFragment : Fragment() {
     private var _binding: FragmentBmrBinding? = null
 
     private val binding get() = _binding!!
-    // TODO: Source these values from the registration segment; pass via bundle, maybe use the text view values directly?
-    private val gender: Gender = Gender.MALE
-    private val age: Int = 26
-    private val height: Int = 175
-    private val weight: Int = 61
-    private val activity: Activity = Activity.LIGHT
+
+    // https://developer.android.com/guide/fragments/communicate#viewmodel
+    private val viewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,18 +58,33 @@ class BmrFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val calculatedBMR: Int = calculateBMR(gender, age, height, weight)
-        binding.textViewBmrBasePreface.text = getString(R.string.text_view_bmr_base_preface).format(
-            gender,
-            age,
-            height,
-            weight
-        )
-        binding.textViewBmrTargetPreface.text = getString(R.string.text_view_bmr_target_preface).format(activity)
-        binding.textViewBmrBaseCalculated.text = getString(R.string.text_view_bmr_base_calculated).format(calculatedBMR)
-        binding.textViewBmrTargetCalculated.text = getString(R.string.text_view_bmr_target_calculated).format(
-            (calculatedBMR * activity.multiplier).toInt()
-        )
+        viewModel.state.observe(this, Observer { state ->
+            // If any field is null, the user data hasn't been saved successfully (gender was arbitrarily chosen)
+            state.gender?.let {
+                val gender = Gender.values()[state.gender]
+                val age = state.age!!
+                val height = state.height!!
+                val weight = state.weight!!
+                val activity = Activity.values()[state.activity!!]
+                val calculatedBMR: Int = calculateBMR(gender, age, inchesToCentimeters(height), poundsToKilograms(weight))
+                binding.textViewBmrBasePreface.text = getString(R.string.text_view_bmr_base_preface).format(
+                    gender,
+                    age,
+                    "%d'%d\"".format(height / 12, height % 12),
+                    weight
+                )
+                binding.textViewBmrTargetPreface.text = getString(R.string.text_view_bmr_target_preface).format(activity)
+                binding.textViewBmrBaseCalculated.text = getString(R.string.text_view_bmr_base_calculated).format(calculatedBMR)
+                binding.textViewBmrTargetCalculated.text = getString(R.string.text_view_bmr_target_calculated).format(
+                    (calculatedBMR * activity.multiplier).toInt()
+                )
+            } ?: run {
+                binding.textViewBmrBasePreface.text = resources.getString(R.string.text_view_bmr_awaiting_user_data)
+                binding.textViewBmrTargetPreface.text = ""
+                binding.textViewBmrBaseCalculated.text = ""
+                binding.textViewBmrTargetCalculated.text = ""
+            }
+        })
     }
 
     override fun onDestroyView() {

@@ -1,18 +1,22 @@
 <resources>
-    <string name="app_name">LIfestyle</string>
+    <string name="app_name">Lifestyle</string>
 
     <string name="label_bmr_fragment">BMR</string>
     <string name="label_home_fragment">Home</string>
+    <string name="label_user_fragment">User</string>
 
     <string name="text_view_home_welcome">Welcome!</string>
     <string name="text_view_home_welcome_prompt">Let\'s collect some info to get started</string>
     <string name="text_view_bmr_title">BMR Calculator</string>
-    <string name="text_view_bmr_base_preface">Gender: %s\nAge: %d\nHeight: %s cm\nWeight: %s kg\nYour calculated BMR (basal metabolic rate) is</string>
+    <string name="text_view_bmr_base_preface">Gender: %s\nAge: %d\nHeight: %s\nWeight: %s lbs\nYour calculated BMR (basal metabolic rate) is</string>
     <string name="text_view_bmr_base_calculated">%d calories</string>
     <string name="text_view_bmr_target_preface">Activity: %s\nYour daily calorie target is</string>
     <string name="text_view_bmr_target_calculated">%d calories</string>
+    <string name="text_view_bmr_awaiting_user_data">(Awaiting user data)</string>
 
     <string name="button_register_text">Register</string>
+    <string name="fab_find_hikes_nearby">Find hikes nearby</string>
+    <string name="fab_weather">Find the local weather</string>
     <string name="label_weather_fragment">Weather</string>
     <string name="hello_weather_fragment">Weather</string>
 </resources>
