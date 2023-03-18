@@ -45,4 +45,17 @@
         app:layout_anchorGravity="top"
         app:useCompatPadding="true" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="16dp"
+        app:srcCompat="@drawable/baseline_my_location_24"
+        app:layout_anchor="@+id/fab_weather"
+        android:contentDescription="@string/fab_location"
+        app:layout_anchorGravity="top"
+        app:useCompatPadding="true" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

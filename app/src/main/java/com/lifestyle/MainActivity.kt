@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -16,7 +15,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.app.ActivityCompat
@@ -28,8 +26,6 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.lifestyle.databinding.ActivityMainBinding
 import java.util.*
@@ -53,7 +49,6 @@ class MainActivity : AppCompatActivity() {
     private var country: String? = null
 
     private lateinit var geocoder: Geocoder
-    private var geocoderResult: String? = null
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -66,17 +61,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//    // LocationRequest - Requirements for the location updates, i.e.,
-//    // how often you should receive updates, the priority, etc.
-//    private lateinit var locationRequest: LocationRequest
-//
-//    // LocationCallback - Called when FusedLocationProviderClient
-//    // has a new Location
-//    private lateinit var locationCallback: LocationCallback
-//
-//    // This will store current location info
-//    private var currentLocation: Location? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -84,11 +68,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
-//        locationData = new LocationData()
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        binding.fabLocation.setOnClickListener { view ->
+            when (view.id) {
+                R.id.fab_location -> {
+                    requestLocationPermission(view, "rGeocode")
+                }
+            }
+        }
 
         binding.fabWeather.setOnClickListener { view ->
             Snackbar.make(view, "Missing location info", Snackbar.LENGTH_LONG)
@@ -119,7 +110,7 @@ class MainActivity : AppCompatActivity() {
 
                     /** This block is what is intended to be used... */
                     // Request the users location
-                    requestLocationPermission(view)
+                    requestLocationPermission(view, "hike")
 
 //                    if (isLocationPermissionGranted()) {
 //                        // This is the hardcoded WEB location, for testing
@@ -153,7 +144,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun requestLocationPermission(view: View) {
+    private fun requestLocationPermission(view: View, action: String) {
         when {
             ContextCompat.checkSelfPermission(
                 this,
@@ -165,10 +156,6 @@ class MainActivity : AppCompatActivity() {
                 fusedLocationProviderClient.lastLocation
                     .addOnSuccessListener { location: Location? ->
                         if (location != null) {
-                            println("Before setting data...")
-                            println("Latitude = " + latitude)
-                            println("Longitude = " + longitude)
-
                             latitude  = location.latitude
                             longitude = location.longitude
 
@@ -179,47 +166,41 @@ class MainActivity : AppCompatActivity() {
                             println("Latitude = " + location.latitude)
                             println("Longitude = " + location.longitude)
 
-                            findHikesNearby(view)
-
-                            val geocodeListener = Geocoder.GeocodeListener { addresses ->
-                                country = addresses[0].countryName
-                                city = addresses[0].locality
-
-                                println("reverse geocoding results:")
-                                println("city: " + city)
-                                println("country: " + country)
+                            if (action.equals("hike")){
+                                findHikesNearby(view)
                             }
-                            if (Build.VERSION.SDK_INT >= 33) {
-                                geocoder.getFromLocation(latitude!!, longitude!!, 1, geocodeListener)
+                            else if (action.equals("rGeocode")) {
+                                fetchCityAndCountry()
+                            }
+                            else if (action.equals("weather")) {
+                                getWeather()
                             }
                         }
-
                     }
             }
             ActivityCompat.shouldShowRequestPermissionRationale(
                 this,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) -> {
-                Toast.makeText(this, "Location access required for weather and hiking services", Toast.LENGTH_LONG).show();
-                //Additional rationale should be displayed
-//                layout.showSnackbar(
-//                    view,
-//                    getString(R.string.permission_required),
-//                    Snackbar.LENGTH_INDEFINITE,
-//                    getString(R.string.ok)
-//                )
-                {
-                    requestPermissionLauncher.launch(
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    )
-//                Snackbar.make(
-//                    view,
-//                    "getString", Snackbar.LENGTH_LONG).setAction("Action", null).show()
-//                )
-                }
+                Toast.makeText(this, "Location access required for weather and hiking services", Toast.LENGTH_LONG).show()
+//                //Additional rationale should be displayed
+////                layout.showSnackbar(
+////                    view,
+////                    getString(R.string.permission_required),
+////                    Snackbar.LENGTH_INDEFINITE,
+////                    getString(R.string.ok)
+////                )
+//                {
+//                    requestPermissionLauncher.launch(
+//                        Manifest.permission.ACCESS_COARSE_LOCATION
+//                    )
+////                Snackbar.make(
+////                    view,
+////                    "getString", Snackbar.LENGTH_LONG).setAction("Action", null).show()
+////                )
+//                }
             } else -> {
                 // Permission has not been asked yet
-
                 requestPermissionLauncher.launch(
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 )
@@ -254,8 +235,29 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Please enable location permissions to find hikes near you.", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+    }
 
 
+    private fun fetchCityAndCountry() {
+        val geocodeListener = Geocoder.GeocodeListener { addresses ->
+            country = addresses[0].countryName
+            city = addresses[0].locality
+
+            println("reverse geocoding results:")
+            println("city: " + city)
+            println("country: " + country)
+        }
+        geocoder.getFromLocation(
+            latitude!!,
+            longitude!!,
+            1,
+            geocodeListener
+        )
+    }
+
+
+    private fun getWeather() {
+        // TODO: implement this method
     }
 
     private fun isLocationPermissionGranted(): Boolean {
