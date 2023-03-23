@@ -6,51 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".WeatherFragment">
 
-    <TextView
-        android:id="@+id/text_view_weather_welcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tap to get weather!"
-        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-        app:layout_constraintBottom_toTopOf="@+id/text_view_weather_welcome_prompt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-    <Button
-        android:id="@+id/button_fetch_weather"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Fetch"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/text_view_weather_welcome_prompt"
-        app:layout_constraintStart_toStartOf="@+id/text_view_weather_welcome_prompt"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_weather_welcome_prompt" />
+    <ImageView
+        android:id="@+id/iv_weather_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@color/black_night_sky" />
 
     <TextView
-        android:id="@+id/text_view_weather_welcome_prompt"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_city"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="PLACE"
-        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-        app:layout_constraintBottom_toTopOf="@+id/button_fetch_weather"
-        app:layout_constraintEnd_toEndOf="@+id/text_view_weather_welcome"
-        app:layout_constraintStart_toStartOf="@+id/text_view_weather_welcome"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_weather_welcome" />
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="CITY"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_temperature"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_temperature"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Temperature"
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="TEMP"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_fetch_weather" />
+        app:layout_constraintTop_toBottomOf="@id/tv_city"
+        tools:layout_editor_absoluteX="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

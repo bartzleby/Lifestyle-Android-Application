@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -34,17 +33,13 @@ class WeatherFragment : Fragment() {
         _binding = FragmentWeatherBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        val btnFetchWeather = view.findViewById<View>(R.id.button_fetch_weather) as Button
         tv_temp = view.findViewById(R.id.tv_temperature)
 
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(getActivity()!!.applicationContext)
 
         val location = "40.75872069597532,-73.98529171943665"
-
-        btnFetchWeather.setOnClickListener {
-            fetchWeather(location)
-        }
+        fetchWeather(location)
 
         return view
     }
