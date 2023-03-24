@@ -67,7 +67,7 @@ class WeatherFragment : Fragment() {
 
 //                println(resbody)
                 runOnUiThread {
-                    tv_temp.text = weatherInfo.data.values.temperature.toString()
+                    tv_temp.text = "${weatherInfo.data.values.temperature.toString()} \u2103"
                 }
             }
         })
