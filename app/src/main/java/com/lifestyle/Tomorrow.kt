@@ -1,5 +1,7 @@
 package com.lifestyle
 
+import com.google.gson.JsonObject
+
 class TomorrowResponse(
     val data: TomorrowData,
     val location: TomorrowLocation
@@ -36,4 +38,11 @@ class WeatherValues(
     val windDirection: Float?,
     val windGust: Float?,
     val windSpeed: Float?
+)
+
+class WeatherCodes(
+    val weatherCode: JsonObject,
+    val weatherCodeFullDay: JsonObject,
+    val weatherCodeDay: JsonObject,
+    val weatherCodeNight: JsonObject
 )

@@ -19,6 +19,8 @@ class WeatherFragment : Fragment() {
     private val baseUrl = "https://api.tomorrow.io/v4/weather/realtime"
     private val wapikey: String = BuildConfig.WAPI_KEY
 
+    private lateinit var weatherCodes: WeatherCodes
+
     private lateinit var tvCity: TextView
     private lateinit var tvTemperature: TextView
     private lateinit var tvCondition: TextView
@@ -34,6 +36,18 @@ class WeatherFragment : Fragment() {
     ): View {
         _binding = FragmentWeatherBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        val gson = GsonBuilder().create()
+        weatherCodes = gson.fromJson(
+            activity!!.applicationContext.resources.openRawResource(
+                activity!!.applicationContext.resources.getIdentifier(
+                    "weather_codes",
+                    "raw",
+                    activity!!.applicationContext.packageName
+                )
+            ).bufferedReader().use { it.readText() },
+            WeatherCodes::class.java
+        )
 
         tvCity = view.findViewById(R.id.tv_city)
         tvTemperature = view.findViewById(R.id.tv_temperature)
