@@ -12,6 +12,7 @@ import com.google.gson.GsonBuilder
 import com.lifestyle.databinding.FragmentWeatherBinding
 import okhttp3.*
 import java.io.IOException
+import java.net.UnknownHostException
 
 class WeatherFragment : Fragment() {
     private val client = OkHttpClient()
@@ -57,7 +58,13 @@ class WeatherFragment : Fragment() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                //TODO: handle network errors, etc.
+                when (e) {
+                    is UnknownHostException -> {
+                        println(e) // weak wifi? ,  no internet?
+                    }
+                    else -> {
+                    }
+                }
             }
 
             override fun onResponse(call: Call, response: Response) {
