@@ -8,8 +8,8 @@ class TomorrowResponse(
 )
 
 class TomorrowLocation(
-    val lat: Float,
-    val lon: Float
+    val lat: Double,
+    val lon: Double
 )
 
 class TomorrowData(
@@ -34,7 +34,7 @@ class WeatherValues(
     val uvHealthConcern: Float?,
     val uvIndex: Float?,
     val visibility: Float?,
-    val weatherCode: Float?,
+    val weatherCode: String,
     val windDirection: Float?,
     val windGust: Float?,
     val windSpeed: Float?

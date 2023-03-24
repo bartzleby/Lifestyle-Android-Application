@@ -1,5 +1,6 @@
 package com.lifestyle
 
+import android.location.Geocoder
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import com.lifestyle.databinding.FragmentWeatherBinding
 import okhttp3.*
 import java.io.IOException
 import java.net.UnknownHostException
+import java.util.*
 
 class WeatherFragment : Fragment() {
     private val client = OkHttpClient()
@@ -89,7 +91,15 @@ class WeatherFragment : Fragment() {
                 val weatherInfo = gson.fromJson(resbody, TomorrowResponse::class.java)
 
                 runOnUiThread {
+                    val weatherCode = weatherInfo.data.values.weatherCode
+                    val weatherDescription = weatherCodes.weatherCode[weatherCode].toString()
+                    tvCondition.text = weatherDescription.substring(1, weatherDescription.length - 1) // hacky to remove bounding quotes
                     tvTemperature.text = "${weatherInfo.data.values.temperature.toString()} \u2103"
+                    tvCity.text = getCityName(
+                        weatherInfo.location.lat,
+                        weatherInfo.location.lon
+                    )
+
                 }
             }
         })
@@ -100,6 +110,22 @@ class WeatherFragment : Fragment() {
 
         _binding = null
     }
+
+    // hacky, from https://stackoverflow.com/questions/73497416/how-can-i-find-city-name-from-longitude-and-latitude-kotlin
+    private fun getCityName(lat: Double,long: Double): String? {
+        var cityName: String?
+        val geoCoder = Geocoder(activity!!, Locale.getDefault())
+        val address = geoCoder.getFromLocation(lat,long,1)
+        cityName = address?.get(0)?.adminArea
+        if (cityName == null){
+            cityName = address?.get(0)?.locality
+            if (cityName == null){
+                cityName = address?.get(0)?.subAdminArea
+            }
+        }
+        return cityName
+    }
+
 }
 
 private val meteoconMap = mapOf(
