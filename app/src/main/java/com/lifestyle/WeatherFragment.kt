@@ -127,9 +127,3 @@ class WeatherFragment : Fragment() {
     }
 
 }
-
-private val meteoconMap = mapOf(
-    "sunrise" to "meteocon_01_white",
-    "sunny" to "meteocon_02_white"
-)
-
