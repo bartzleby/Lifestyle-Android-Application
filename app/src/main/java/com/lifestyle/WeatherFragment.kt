@@ -5,9 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.GsonBuilder
 import com.lifestyle.databinding.FragmentWeatherBinding
 import okhttp3.*
@@ -19,12 +19,13 @@ class WeatherFragment : Fragment() {
     private val baseUrl = "https://api.tomorrow.io/v4/weather/realtime"
     private val wapikey: String = BuildConfig.WAPI_KEY
 
-    private lateinit var tv_temp: TextView
+    private lateinit var tvCity: TextView
+    private lateinit var tvTemperature: TextView
+    private lateinit var tvCondition: TextView
+    private lateinit var ivCondition: ImageView
+    private lateinit var rvForecast: RecyclerView
 
     private var _binding: FragmentWeatherBinding? = null
-
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -34,10 +35,11 @@ class WeatherFragment : Fragment() {
         _binding = FragmentWeatherBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        tv_temp = view.findViewById(R.id.tv_temperature)
-
-        fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(getActivity()!!.applicationContext)
+        tvCity = view.findViewById(R.id.tv_city)
+        tvTemperature = view.findViewById(R.id.tv_temperature)
+        tvCondition = view.findViewById(R.id.tv_condition)
+        ivCondition = view.findViewById(R.id.iv_condition)
+        rvForecast = view.findViewById(R.id.rv_forecast)
 
         val location = "40.75872069597532,-73.98529171943665"
         fetchWeather(location)
@@ -72,9 +74,8 @@ class WeatherFragment : Fragment() {
                 val gson = GsonBuilder().create()
                 val weatherInfo = gson.fromJson(resbody, TomorrowResponse::class.java)
 
-//                println(resbody)
                 runOnUiThread {
-                    tv_temp.text = "${weatherInfo.data.values.temperature.toString()} \u2103"
+                    tvTemperature.text = "${weatherInfo.data.values.temperature.toString()} \u2103"
                 }
             }
         })
