@@ -19,6 +19,7 @@ import java.io.IOException
 import java.net.UnknownHostException
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.round
 
 class WeatherFragment : Fragment() {
     private val client = OkHttpClient()
@@ -51,6 +52,8 @@ class WeatherFragment : Fragment() {
         val gson = GsonBuilder().create()
         readWeatherCodes(gson)
 
+        // TODO: change background based on time of day
+
         pbLoading = view.findViewById(R.id.pb_loading)
         tvCity = view.findViewById(R.id.tv_city)
         tvTemperature = view.findViewById(R.id.tv_temperature)
@@ -68,7 +71,7 @@ class WeatherFragment : Fragment() {
         rvAdapter = WeatherRVAdapter(weatherData, null)
         rvForecast.adapter = rvAdapter
 
-        val location = "40.75872069597532,-73.98529171943665"
+        val location = "40.758701,-111.876183"
         fetchWeather(location)
         fetchWeatherForecast(location)
 
@@ -114,8 +117,9 @@ class WeatherFragment : Fragment() {
                         ivCondition.setImageResource(it)
                     }
 
+                    // TODO: support multi-line condition description
                     tvCondition.text = weatherDescription
-                    tvTemperature.text = "${weatherInfo.data.values.temperature.toString()} \u2103"
+                    tvTemperature.text = "${weatherInfo.data.values.temperature?.let { round(it).toString().dropLast(2) }} \u2103"
                     tvCity.text = getCityName(
                         weatherInfo.location.lat,
                         weatherInfo.location.lon

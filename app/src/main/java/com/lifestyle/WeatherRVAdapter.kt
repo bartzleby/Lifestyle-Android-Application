@@ -7,6 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.math.round
 
 class WeatherRVAdapter(weatherData: ArrayList<TomorrowData>, weatherCodes: WeatherCodes?) :
     RecyclerView.Adapter<WeatherRVAdapter.ViewHolder>() {
@@ -15,7 +19,6 @@ class WeatherRVAdapter(weatherData: ArrayList<TomorrowData>, weatherCodes: Weath
     private val weatherCodes = weatherCodes
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var tvWindSpeed: TextView = itemView.findViewById(R.id.tv_forecast_wind_sp)
         var tvTemperature: TextView = itemView.findViewById(R.id.tv_forecast_temperature)
         var tvTime: TextView = itemView.findViewById(R.id.tv_forecast_time)
         var ivCondition: ImageView = itemView.findViewById(R.id.iv_forecast_condition)
@@ -43,14 +46,24 @@ class WeatherRVAdapter(weatherData: ArrayList<TomorrowData>, weatherCodes: Weath
                 weatherDescription.length - 1
             ) // hacky to remove bounding quotes
 
-            println(weatherDescription)
+//            println(weatherDescription)
             weather_code_to_icon_map[weatherCode.toInt()]?.let {
                 holder.ivCondition.setImageResource(it)
             }
         }
 
-        holder.tvTime.text = data.time
-        holder.tvTemperature.text = data.values.temperature.toString()
+        var inputTimeFmt: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'")
+        inputTimeFmt.timeZone = TimeZone.getTimeZone("GMT")
+        var outputTimeFmt: SimpleDateFormat = SimpleDateFormat("hh:mm aa")
+        try {
+            var t: Date = inputTimeFmt.parse(data.time)
+            holder.tvTime.text = outputTimeFmt.format(t)
+            // TODO: display date or limit scrolling to today's entries
+        } catch(e: java.lang.Exception) {
+            println(e)
+        }
+
+        holder.tvTemperature.text = "${data.values.temperature?.let { round(it).toString().dropLast(2) }} \u2103"
 
     }
 
