@@ -1,3 +1,8 @@
+//
+// Contains classes corresponding to tomorrow.io
+// API responses for simple unpacking
+//
+
 package com.lifestyle
 
 import com.google.gson.JsonObject
@@ -5,6 +10,15 @@ import com.google.gson.JsonObject
 class TomorrowResponse(
     val data: TomorrowData,
     val location: TomorrowLocation
+)
+
+class TomorrowHourlyForecast(
+    val timelines: TimeLines,
+    val location: TomorrowLocation
+)
+
+class TimeLines(
+    val hourly: ArrayList<TomorrowData>
 )
 
 class TomorrowLocation(

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black_night_sky"
     tools:context=".WeatherFragment">
 
     <ImageView
@@ -13,13 +14,18 @@
         android:scaleType="centerCrop"
         android:src="@color/black_night_sky" />
 
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
+
     <TextView
         android:id="@+id/tv_city"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
-        android:padding="20dp"
-        android:text="CITY"
+        android:padding="20sp"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="24dp"
@@ -40,10 +46,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="TEMP"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="32dp"
+            android:textSize="32sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/ll_condition"
             app:layout_constraintStart_toStartOf="parent"
@@ -63,8 +68,7 @@
                 android:id="@+id/iv_condition"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/ti_cloudy" />
+                android:adjustViewBounds="true" />
 
             <TextView
                 android:id="@+id/tv_condition"
@@ -73,7 +77,6 @@
                 android:layout_below="@id/iv_condition"
                 android:gravity="center"
                 android:padding="1dp"
-                android:text="COND"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="16dp" />
@@ -87,6 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:scrollbars="horizontal"
         app:layout_constraintBottom_toTopOf="@id/iv_powered_by_tomorrow"
         app:layout_constraintTop_toBottomOf="@id/ll_main_display">
 
@@ -96,7 +100,7 @@
         android:id="@+id/iv_powered_by_tomorrow"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:paddingRight="100dp"
+        android:paddingEnd="100dp"
         android:src="@drawable/powered_by_tomorrow_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rv_forecast" />
