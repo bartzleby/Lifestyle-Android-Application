@@ -8,10 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class WeatherRVAdapter(weatherData: ArrayList<TomorrowData>) :
+class WeatherRVAdapter(weatherData: ArrayList<TomorrowData>, weatherCodes: WeatherCodes?) :
     RecyclerView.Adapter<WeatherRVAdapter.ViewHolder>() {
     private var ctx: Context? = null
     private var weatherData = weatherData
+    private val weatherCodes = weatherCodes
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var tvWindSpeed: TextView = itemView.findViewById(R.id.tv_forecast_wind_sp)
@@ -32,6 +33,21 @@ class WeatherRVAdapter(weatherData: ArrayList<TomorrowData>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var data: TomorrowData = weatherData[position]
+
+        val weatherCode = data.values.weatherCode
+        var weatherDescription = weatherCodes?.weatherCode?.get(weatherCode)?.toString()
+
+        if (weatherDescription != null) {
+            weatherDescription = weatherDescription.substring(
+                1,
+                weatherDescription.length - 1
+            ) // hacky to remove bounding quotes
+
+            println(weatherDescription)
+            weather_code_to_icon_map[weatherCode.toInt()]?.let {
+                holder.ivCondition.setImageResource(it)
+            }
+        }
 
         holder.tvTime.text = data.time
         holder.tvTemperature.text = data.values.temperature.toString()

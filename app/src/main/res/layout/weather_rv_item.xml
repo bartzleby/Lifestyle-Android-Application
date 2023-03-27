@@ -43,8 +43,7 @@
             android:layout_below="@id/tv_forecast_temperature"
             android:layout_centerHorizontal="true"
             android:layout_margin="5dp"
-            android:padding="4dp"
-            android:src="@mipmap/ic_launcher" />
+            android:padding="4dp" />
 
         <TextView
             android:id="@+id/tv_forecast_wind_sp"
@@ -52,12 +51,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/iv_forecast_condition"
             android:layout_centerHorizontal="true"
+            android:layout_margin="4dp"
             android:gravity="center"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:text="13"
             android:padding="3dp"
-            android:layout_margin="4dp"/>
+            android:text="13"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
 
 
     </RelativeLayout>

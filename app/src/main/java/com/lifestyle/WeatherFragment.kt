@@ -65,7 +65,7 @@ class WeatherFragment : Fragment() {
         rvForecast!!.layoutManager = layoutManager
 
         // set RV Adapter
-        rvAdapter = WeatherRVAdapter(weatherData)
+        rvAdapter = WeatherRVAdapter(weatherData, null)
         rvForecast.adapter = rvAdapter
 
         val location = "40.75872069597532,-73.98529171943665"
@@ -102,16 +102,25 @@ class WeatherFragment : Fragment() {
                 runOnUiThread {
                     pbLoading.visibility = View.GONE
                     val weatherCode = weatherInfo.data.values.weatherCode
-                    val weatherDescription = weatherCodes.weatherCode[weatherCode].toString()
-                    tvCondition.text = weatherDescription.substring(
+                    var weatherDescription = weatherCodes.weatherCode[weatherCode].toString()
+                    weatherDescription = weatherDescription.substring(
                         1,
                         weatherDescription.length - 1
                     ) // hacky to remove bounding quotes
+
+                    // map description to icon as described,
+                    // and set image view appropriately
+                    weather_code_to_icon_map[weatherCode.toInt()]?.let {
+                        ivCondition.setImageResource(it)
+                    }
+
+                    tvCondition.text = weatherDescription
                     tvTemperature.text = "${weatherInfo.data.values.temperature.toString()} \u2103"
                     tvCity.text = getCityName(
                         weatherInfo.location.lat,
                         weatherInfo.location.lon
                     )
+
 
                 }
             }
@@ -145,11 +154,9 @@ class WeatherFragment : Fragment() {
                 runOnUiThread {
                     weatherData.clear()
                     weatherData = weatherForecastInfo.timelines.hourly
-                    val weatherCode = weatherForecastInfo.timelines.hourly[0].values.weatherCode
-                    val weatherDescription = weatherCodes.weatherCode[weatherCode].toString()
 
                     // update RV Adapter with our received forecast data
-                    rvAdapter = WeatherRVAdapter(weatherData)
+                    rvAdapter = WeatherRVAdapter(weatherData, weatherCodes)
                     rvForecast.adapter = rvAdapter
 
                 }
