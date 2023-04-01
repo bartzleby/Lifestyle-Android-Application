@@ -44,6 +44,18 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
     // https://developer.android.com/guide/fragments/communicate#viewmodel
     private val viewModel: SharedViewModel by activityViewModels()
 
+
+    // Initialize the view model here. One per activity.
+    // --can each fragment have one?
+    // While initializing, we'll also inject the repository.
+    // However, standard view model constructor only takes a context to
+    // the activity. We'll need to define our own constructor, but this
+    // requires writing our own view model factory.
+    private val mLifestyleViewModel: LifestyleViewModel by activityViewModels() {
+        LifestyleViewModelFactory((requireContext().applicationContext as LifestyleApplication).repository)
+    }
+
+
     //Create variables to hold the strings
     private var mFullName: String? = null
     private var mAge: Int? = null
@@ -294,6 +306,11 @@ class UserInfo : Fragment(),  View.OnClickListener,  AdapterView.OnItemSelectedL
                     viewModel.selectHeight(mHeight!![0].digitToInt() * 12 + mInches!!.replace("\"", "").toInt())
                     Snackbar.make(view, "User data saved!", Snackbar.LENGTH_LONG).show()
                     //Instantiate the fragment
+
+                    var userData = UserData(mFullName!!)
+                    // pass the user data down to the LifestyleRepository via the view model
+                    mLifestyleViewModel.setUserData(userData)
+
                 }
 
 
