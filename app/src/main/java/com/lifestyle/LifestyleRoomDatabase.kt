@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [UserData::class], version = 1, exportSchema = false)
+@Database(entities = [UserData::class], version = 2, exportSchema = false)
 abstract class LifestyleRoomDatabase : RoomDatabase() {
     abstract fun lifestyleDao(): LifestyleDao
 
@@ -49,7 +49,7 @@ abstract class LifestyleRoomDatabase : RoomDatabase() {
         }
 
         suspend fun populateDbTask(lifestyleDao: LifestyleDao) {
-            lifestyleDao.insert(UserData("Damien"))
+            lifestyleDao.insert(UserData("Damien", "Boston", "United States"))
         }
     }
 }

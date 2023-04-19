@@ -31,7 +31,9 @@ class LifestyleRepository private constructor(lifestyleDao: LifestyleDao) {
     @WorkerThread
     suspend fun insert() {
         if (mUserData != null) {
-            mLifestyleDao.insert(UserData(mUserData!!.fullName!!))
+            mLifestyleDao.insert(
+                mUserData!!
+            )
         }
     }
 

@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LifestyleDao {
-    // Insert ignore
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(userTable: UserData)
 }
