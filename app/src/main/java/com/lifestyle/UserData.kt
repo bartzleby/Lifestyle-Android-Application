@@ -1,3 +1,6 @@
+//
+// class corresponding to user database table
+//
 package com.lifestyle
 
 import androidx.annotation.NonNull
@@ -16,6 +19,8 @@ class UserData(
     sex: String,
     activity: String
 ) {
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0
 
     // TODO: make proper primary key
     @field:PrimaryKey(autoGenerate = true)

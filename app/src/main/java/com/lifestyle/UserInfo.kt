@@ -101,14 +101,14 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
 
         // TODO: weight entry should probably be by some other method
         weightSpinner = view.findViewById(R.id.weight_spinner)
-        weightSpinner!!.setOnItemSelectedListener(this)
+        weightSpinner!!.onItemSelectedListener = this
         val ad2 = ArrayAdapter(view.context, android.R.layout.simple_spinner_item, weight_list)
         ad2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         weightSpinner!!.setAdapter(ad2)
 
 
         ageSpinner = view.findViewById(R.id.age_spinner)
-        ageSpinner!!.setOnItemSelectedListener(this)
+        ageSpinner!!.onItemSelectedListener = this
         val ad4 = ArrayAdapter(view.context, android.R.layout.simple_spinner_item, age_list)
         ad4.setDropDownViewResource(android.R.layout.select_dialog_item)
         ageSpinner!!.setAdapter(ad4)
@@ -118,6 +118,12 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
         setupSimpleSpinner(view, R.id.feet_spinner, feet_list)
         setupSimpleSpinner(view, R.id.inches_spinner, inches_list)
         setupSimpleSpinner(view, R.id.city_spinner, city_list)
+
+        // TODO: should this be in MainActivity?
+        // we start with empty weather database tables:
+        mLifestyleViewModel.clearUserData() // do we want this to happen?
+        mLifestyleViewModel.clearWeatherData()
+
 
         return view
     }

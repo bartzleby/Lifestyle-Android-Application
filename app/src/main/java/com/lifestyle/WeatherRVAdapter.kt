@@ -12,7 +12,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.round
 
-class WeatherRVAdapter(weatherData: ArrayList<TomorrowData>, weatherCodes: WeatherCodes?) :
+class WeatherRVAdapter(weatherData: ArrayList<WeatherDataForecast>, weatherCodes: WeatherCodes?) :
     RecyclerView.Adapter<WeatherRVAdapter.ViewHolder>() {
     private var ctx: Context? = null
     private var weatherData = weatherData
@@ -35,9 +35,9 @@ class WeatherRVAdapter(weatherData: ArrayList<TomorrowData>, weatherCodes: Weath
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var data: TomorrowData = weatherData[position]
+        var data: WeatherDataForecast = weatherData[position]
 
-        val weatherCode = data.values.weatherCode
+        val weatherCode = data.weatherCode
         var weatherDescription = weatherCodes?.weatherCode?.get(weatherCode)?.toString()
 
         if (weatherDescription != null) {
@@ -63,7 +63,7 @@ class WeatherRVAdapter(weatherData: ArrayList<TomorrowData>, weatherCodes: Weath
             println(e)
         }
 
-        holder.tvTemperature.text = "${data.values.temperature?.let { round(it).toString().dropLast(2) }} \u2103"
+        holder.tvTemperature.text = "${data.temperature?.let { round(it).toString().dropLast(2) }} \u2103"
 
     }
 

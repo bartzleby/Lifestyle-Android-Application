@@ -1,6 +1,5 @@
 package com.lifestyle
 
-import android.location.Geocoder
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,23 +8,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.lifestyle.databinding.FragmentWeatherBinding
-import okhttp3.*
-import java.io.IOException
-import java.net.UnknownHostException
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.round
 
 class WeatherFragment : Fragment() {
-    private val client = OkHttpClient()
-    private val baseUrl = "https://api.tomorrow.io/v4/weather"
-    private val wapikey: String = BuildConfig.WAPI_KEY
-    private val ts = "1h"
 
     private lateinit var weatherCodes: WeatherCodes
 
@@ -36,8 +29,12 @@ class WeatherFragment : Fragment() {
     private lateinit var ivCondition: ImageView
     private lateinit var rvForecast: RecyclerView
     private lateinit var rvAdapter: RecyclerView.Adapter<*>
-    private var weatherData: ArrayList<TomorrowData> = ArrayList()
+    private var weatherData: List<WeatherDataForecast> = ArrayList()
     private lateinit var layoutManager: RecyclerView.LayoutManager
+
+    private val mLifestyleViewModel: LifestyleViewModel by viewModels {
+        LifestyleViewModelFactory((requireContext().applicationContext as LifestyleApplication).repository)
+    }
 
     private var _binding: FragmentWeatherBinding? = null
     private val binding get() = _binding!!
@@ -52,6 +49,11 @@ class WeatherFragment : Fragment() {
         val gson = GsonBuilder().create()
         readWeatherCodes(gson)
 
+        // set an observer for the flow-converted-to-livedata objects
+        mLifestyleViewModel.liveUserData.observe(this, userDataObserver)
+        mLifestyleViewModel.currentWeather.observe(this, currentWeatherFlowObserver)
+        mLifestyleViewModel.forecastWeather.observe(this, forecastWeatherFlowObserver)
+
         // TODO: change background based on time of day
 
         pbLoading = view.findViewById(R.id.pb_loading)
@@ -62,111 +64,74 @@ class WeatherFragment : Fragment() {
 
         // set up forecast recycler view
         rvForecast = view.findViewById(R.id.rv_forecast)
-        rvForecast!!.setHasFixedSize(true)
+        rvForecast.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(activity)
         (layoutManager as LinearLayoutManager).orientation = LinearLayoutManager.HORIZONTAL
-        rvForecast!!.layoutManager = layoutManager
+        rvForecast.layoutManager = layoutManager
 
         // set RV Adapter
-        rvAdapter = WeatherRVAdapter(weatherData, null)
+        rvAdapter = WeatherRVAdapter(ArrayList(weatherData), null)
         rvForecast.adapter = rvAdapter
 
-        val location = "40.758701,-111.876183"
-        fetchWeather(location)
-        fetchWeatherForecast(location)
+        // clear weather data and indicatate a loading status to user
+        mLifestyleViewModel.clearWeatherData()
+        pbLoading.visibility = View.VISIBLE
 
         return view
     }
 
-    /*
-     * Fetch real time weather from tomorrow.io realtime endpoint
-     */
-    private fun fetchWeather(location: String) {
-        val url =
-            "$baseUrl/realtime?location=$location&apikey=$wapikey"
-        val request = Request.Builder().url(url).build()
+    private val userDataObserver: Observer<UserData> =
+        Observer { userData ->
+            if (userData != null) {
+                val loc = userData.city
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                when (e) {
-                    is UnknownHostException -> {
-                        println(e) // weak wifi? ,  no internet?
-                    }
-                    else -> {
-                    }
+                if (loc.isNullOrBlank()) {
+                    // TODO: tell user to submit data:
+
+                } else {
+                    // we perform this asynchronously via the viewmodel
+                    mLifestyleViewModel.fetchWeather(loc)
                 }
             }
+        }
 
-            override fun onResponse(call: Call, response: Response) {
-                val resbody = response.body?.string()
-                val gson = GsonBuilder().create()
-                val weatherInfo = gson.fromJson(resbody, TomorrowResponse::class.java)
+    // This observer is triggered when the Flow object in the repository
+    // detects a change to the database (including at the start of the app)
+    // we update relevant UI elements
+    private val currentWeatherFlowObserver: Observer<WeatherDataCurrent> =
+        Observer { weatherData ->
+            if (weatherData != null) {
+                pbLoading.visibility = View.GONE
+                val weatherCode = weatherData.weatherCode
+                var weatherDescription = weatherCodes.weatherCode[weatherCode].toString()
+                weatherDescription = weatherDescription.substring(
+                    1,
+                    weatherDescription.length - 1
+                ) // hacky to remove bounding quotes
 
-                runOnUiThread {
-                    pbLoading.visibility = View.GONE
-                    val weatherCode = weatherInfo.data.values.weatherCode
-                    var weatherDescription = weatherCodes.weatherCode[weatherCode].toString()
-                    weatherDescription = weatherDescription.substring(
-                        1,
-                        weatherDescription.length - 1
-                    ) // hacky to remove bounding quotes
-
-                    // map description to icon as described,
-                    // and set image view appropriately
-                    weather_code_to_icon_map[weatherCode.toInt()]?.let {
-                        ivCondition.setImageResource(it)
-                    }
-
-                    // TODO: support multi-line condition description
-                    tvCondition.text = weatherDescription
-                    tvTemperature.text = "${weatherInfo.data.values.temperature?.let { round(it).toString().dropLast(2) }} \u2103"
-                    tvCity.text = getCityName(
-                        weatherInfo.location.lat,
-                        weatherInfo.location.lon
-                    )
-
-
+                // map description to icon as described,
+                // and set image view appropriately
+                weather_code_to_icon_map[weatherCode.toInt()]?.let {
+                    ivCondition.setImageResource(it)
                 }
+
+                // TODO: support multi-line condition description
+                tvCondition.text = weatherDescription
+                tvTemperature.text =
+                    "${weatherData.temperature.let { round(it).toString().dropLast(2) }} \u2103"
+                tvCity.text = weatherData.city
             }
-        })
-    }
+        }
 
-    /*
-     * Fetch hourly forecast from tomorrow.io forecast endpoint
-     */
-    private fun fetchWeatherForecast(location: String) {
-        val url =
-            "$baseUrl/forecast?location=$location&timesteps=$ts&apikey=$wapikey"
-        val request = Request.Builder().url(url).build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                when (e) {
-                    is UnknownHostException -> {
-                        println(e) // weak wifi? ,  no internet?
-                    }
-                    else -> {
-                    }
-                }
+    private val forecastWeatherFlowObserver: Observer<List<WeatherDataForecast>> =
+        Observer { weatherData ->
+            if (weatherData != null) {
+                // update RV Adapter with our received forecast data
+                rvAdapter = WeatherRVAdapter(ArrayList(weatherData), weatherCodes)
+                rvForecast.adapter = rvAdapter
             }
+        }
 
-            override fun onResponse(call: Call, response: Response) {
-                val resbody = response.body?.string()
-                val gson = GsonBuilder().create()
-                val weatherForecastInfo = gson.fromJson(resbody, TomorrowHourlyForecast::class.java)
-
-                runOnUiThread {
-                    weatherData.clear()
-                    weatherData = weatherForecastInfo.timelines.hourly
-
-                    // update RV Adapter with our received forecast data
-                    rvAdapter = WeatherRVAdapter(weatherData, weatherCodes)
-                    rvForecast.adapter = rvAdapter
-
-                }
-            }
-        })
-    }
 
     // TODO
     override fun onSaveInstanceState(outState: Bundle) {
@@ -199,26 +164,4 @@ class WeatherFragment : Fragment() {
             WeatherCodes::class.java
         )
     }
-
-    // hacky, from https://stackoverflow.com/questions/73497416/how-can-i-find-city-name-from-longitude-and-latitude-kotlin
-    private fun getCityName(lat: Double, long: Double): String? {
-        var cityName: String?
-        val geoCoder = Geocoder(activity!!, Locale.getDefault())
-        val address = geoCoder.getFromLocation(lat, long, 1)
-        cityName = address?.get(0)?.adminArea
-        if (cityName == null) {
-            cityName = address?.get(0)?.locality
-            if (cityName == null) {
-                cityName = address?.get(0)?.subAdminArea
-            }
-        }
-        return cityName
-    }
-
-    fun Fragment?.runOnUiThread(action: () -> Unit) {
-        this ?: return
-        if (!isAdded) return // Fragment not attached to an Activity
-        activity?.runOnUiThread(action)
-    }
-
 }

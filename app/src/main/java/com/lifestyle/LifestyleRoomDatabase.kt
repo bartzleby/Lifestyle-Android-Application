@@ -1,4 +1,4 @@
-package com.lifestyle;
+package com.lifestyle
 
 import android.content.Context
 import androidx.room.Database
@@ -10,7 +10,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [UserData::class], version = 2, exportSchema = false)
+@Database(
+    entities = [
+        UserData::class,
+        WeatherDataCurrent::class,
+        WeatherDataForecast::class
+    ],
+    version = 7,
+    exportSchema = false
+)
 abstract class LifestyleRoomDatabase : RoomDatabase() {
     abstract fun lifestyleDao(): LifestyleDao
 
@@ -37,12 +45,12 @@ abstract class LifestyleRoomDatabase : RoomDatabase() {
 
         private class RoomDatabaseCallback(
             private val scope: CoroutineScope
-        ) : RoomDatabase.Callback() {
+        ) : Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
                 mInstance?.let { database ->
                     scope.launch(Dispatchers.IO) {
-                        populateDbTask(database.lifestyleDao())
+                        // TODO?
                     }
                 }
             }
