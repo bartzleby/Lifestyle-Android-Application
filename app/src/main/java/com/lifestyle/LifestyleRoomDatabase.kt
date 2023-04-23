@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
         WeatherDataCurrent::class,
         WeatherDataForecast::class
     ],
-    version = 7,
+    version = 8,
     exportSchema = false
 )
 abstract class LifestyleRoomDatabase : RoomDatabase() {
