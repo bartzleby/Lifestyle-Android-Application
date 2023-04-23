@@ -119,11 +119,6 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
         setupSimpleSpinner(view, R.id.inches_spinner, inches_list)
         setupSimpleSpinner(view, R.id.city_spinner, city_list)
 
-        // TODO: should this be in MainActivity?
-        // we start with empty weather database tables:
-        mLifestyleViewModel.clearWeatherData()
-
-
         return view
     }
 
