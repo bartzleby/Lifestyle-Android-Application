@@ -25,7 +25,7 @@ val activity_list: List<String> =
         "Extra Active"
     )
 
-val age_list = (13..99).toList()
+val age_list = (13..85).toList()
 val weight_list = (85..500).toList()
 val feet_list: List<String> = listOf("1'", "2'", "3'", "4'", "5'", "6'", "7'")
 val inches_list: List<String> =

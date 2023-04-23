@@ -177,21 +177,23 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
                     //Complain that there's no text
                     Snackbar.make(view, "Please enter your full name.", Snackbar.LENGTH_LONG).show()
                 } else {
+                    val height = mHeight!![0].digitToInt() * 12 + mInches!!.replace(
+                        "\"",
+                        ""
+                    ).toInt()
                     viewModel.selectName(mFullName!!)
                     viewModel.selectGender(sex_list.indexOf(mSex))
                     viewModel.selectActivity(activity_list.indexOf(mActivity))
                     viewModel.selectAge(mAge!!)
                     viewModel.selectWeight(mWeight!!)
                     viewModel.selectHeight(
-                        mHeight!![0].digitToInt() * 12 + mInches!!.replace(
-                            "\"",
-                            ""
-                        ).toInt()
+                        height
                     )
                     //Instantiate the fragment
 
                     // pass the user data down to the LifestyleRepository via the view model
-                    mLifestyleViewModel.setUserData(UserData(mFullName!!, mCity!!, mCountry!!))
+                    mLifestyleViewModel.setUserData(UserData(mFullName!!, mAge!!, mCity!!, mCountry!!,
+                        height, mWeight!!, mSex!!, mActivity!!))
 
                 }
 

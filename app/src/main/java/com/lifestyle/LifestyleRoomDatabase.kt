@@ -49,7 +49,11 @@ abstract class LifestyleRoomDatabase : RoomDatabase() {
         }
 
         suspend fun populateDbTask(lifestyleDao: LifestyleDao) {
-            lifestyleDao.insert(UserData("Damien", "Boston", "United States"))
+            lifestyleDao.insert(UserData("Damien", 23, "Boston", "United States", 70, 180, "Male", "Moderately Active"))
+            //mFullName!!, mAge!!, mCity!!, mCountry!!,
+            //                        mHeight!!, mWeight!!, mSex!!, mActivity!!)
+
+            //lifestyleDao.insert(UserData("Damien", "Boston", "United States"))
         }
     }
 }
