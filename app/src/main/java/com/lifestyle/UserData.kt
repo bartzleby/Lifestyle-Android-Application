@@ -1,3 +1,6 @@
+//
+// class corresponding to user database table
+//
 package com.lifestyle
 
 import androidx.annotation.NonNull
@@ -11,11 +14,10 @@ class UserData(
     city: String?,
     country: String?
 ) {
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0
 
-    // TODO: make proper primary key
     @field:ColumnInfo(name = "full_name")
-    @field:PrimaryKey
-    @NonNull
     var fullName: String = fullName
 
     @field:ColumnInfo(name = "location_city")
