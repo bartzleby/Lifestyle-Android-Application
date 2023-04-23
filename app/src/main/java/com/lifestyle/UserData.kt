@@ -21,7 +21,7 @@ class UserData(
 ) {
     // TODO: make proper primary key
     @field:PrimaryKey(autoGenerate = true)
-    var uID: Int = 0
+    var id: Int = 0
 
     @field:ColumnInfo(name = "full_name")
     @NonNull

@@ -18,7 +18,7 @@ interface LifestyleDao {
 
     // most recent user information submission is considered current user
     // select the location associated with the most recently added user information
-    @Query("SELECT * FROM user_table ORDER BY ID DESC LIMIT 1")
+    @Query("SELECT * FROM user_table ORDER BY id DESC LIMIT 1")
     fun getCurrentUserData(): Flow<UserData>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
