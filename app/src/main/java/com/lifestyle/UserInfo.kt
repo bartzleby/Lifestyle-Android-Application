@@ -121,7 +121,6 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
 
         // TODO: should this be in MainActivity?
         // we start with empty weather database tables:
-        mLifestyleViewModel.clearUserData() // do we want this to happen?
         mLifestyleViewModel.clearWeatherData()
 
 
