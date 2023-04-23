@@ -19,9 +19,6 @@ class UserData(
     sex: String,
     activity: String
 ) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-
     // TODO: make proper primary key
     @field:PrimaryKey(autoGenerate = true)
     var uID: Int = 0
