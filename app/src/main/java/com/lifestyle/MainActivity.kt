@@ -15,7 +15,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.app.ActivityCompat
@@ -66,9 +65,6 @@ class MainActivity : AppCompatActivity() {
                 Log.i("Permission: ", "Denied")
             }
         }
-
-    // https://developer.android.com/guide/fragments/communicate#viewmodel
-    private val viewModel: SharedViewModel by viewModels()
 
     private fun navigateToFragmentFromItem(item: MenuItem): Boolean {
         var fragmentId: Int? = null

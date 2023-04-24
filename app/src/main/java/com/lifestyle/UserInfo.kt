@@ -23,9 +23,6 @@ import java.util.*
 
 class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    // https://developer.android.com/guide/fragments/communicate#viewmodel
-    private val viewModel: SharedViewModel by activityViewModels()
-
     // Initialize the view model here. One per activity.
     // --can each fragment have one?
     // While initializing, we'll also inject the repository.
@@ -181,16 +178,6 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
                         "\"",
                         ""
                     ).toInt()
-                    viewModel.selectName(mFullName!!)
-                    viewModel.selectGender(sex_list.indexOf(mSex))
-                    viewModel.selectActivity(activity_list.indexOf(mActivity))
-                    viewModel.selectAge(mAge!!)
-                    viewModel.selectWeight(mWeight!!)
-                    viewModel.selectHeight(
-                        height
-                    )
-                    //Instantiate the fragment
-
                     // pass the user data down to the LifestyleRepository via the view model
                     mLifestyleViewModel.setUserData(UserData(mFullName!!, mAge!!, mCity!!, mCountry!!,
                         height, mWeight!!, mSex!!, mActivity!!))
