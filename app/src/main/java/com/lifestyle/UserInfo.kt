@@ -16,12 +16,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
+import com.lifestyle.databinding.FragmentUserInfoBinding
 import java.util.*
 
 //Define a global intent variable
 //private var mDisplayIntent: Intent? = null
 
 class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedListener {
+    private var _binding: FragmentUserInfoBinding? = null
+
+    private val binding get() = _binding!!
 
     // Initialize the view model here. One per activity.
     // --can each fragment have one?
@@ -32,6 +36,8 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
     private val mLifestyleViewModel: LifestyleViewModel by activityViewModels() {
         LifestyleViewModelFactory((requireContext().applicationContext as LifestyleApplication).repository)
     }
+
+    private var currentUser: UserData? = null
 
     private var mThumbnailImage: Bitmap? = null
 
@@ -50,6 +56,7 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
 
     private var mButtonSubmit: Button? = null
     private var mButtonCamera: Button? = null
+    private var mButtonLogOut: Button? = null
     private var mIvPic: ImageView? = null
 
     // TODO: these probably shouldn't be spinners:
@@ -81,19 +88,28 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        _binding = FragmentUserInfoBinding.inflate(inflater, container, false)
+
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_user_info, container, false)
+        val view = binding.root//inflater.inflate(R.layout.fragment_user_info, container, false)
+
+        // https://stackoverflow.com/questions/51073244/android-mvvm-how-to-make-livedata-emits-the-data-it-has-forcing-to-trigger-th
+        // Force a LiveData emit, otherwise observer won't be called when switching from different fragment
+        mLifestyleViewModel.liveUserData.removeObservers(this)
+        mLifestyleViewModel.liveUserData.observe(this, userDataObserver)
 
         //Get the buttons
         mButtonSubmit = view.findViewById(R.id.button_submit)
         mButtonCamera = view.findViewById(R.id.button_take_pic)
+        mButtonLogOut = view.findViewById(R.id.button_log_out)
 
         mTvFullName = view.findViewById(R.id.name)
         mIvPic = view.findViewById(R.id.iv_pic)
 
         mButtonSubmit!!.setOnClickListener(this)
         mButtonCamera!!.setOnClickListener(this)
+        mButtonLogOut!!.setOnClickListener(this)
 
 
         // TODO: weight entry should probably be by some other method
@@ -117,6 +133,38 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
         setupSimpleSpinner(view, R.id.city_spinner, city_list)
 
         return view
+    }
+
+    private val userDataObserver: androidx.lifecycle.Observer<UserData> = androidx.lifecycle.Observer { userData ->
+        userData?.let {
+            val gender = Gender.valueOf(userData.sex!!.uppercase())
+            val height = userData.height!!
+            val activity = Activity.valueOf(activityLabelToEnum(userData.activity!!))
+            binding.name.setText(userData.fullName)
+            binding.ageSpinner.setSelection(age_list.indexOf(userData.age!!))
+            binding.citySpinner.setSelection(city_list.indexOf(userData.city!!))
+            binding.feetSpinner.setSelection(feet_list.indexOf("%d\'".format(height / 12)))
+            binding.inchesSpinner.setSelection(inches_list.indexOf("%d\"".format(height % 12)))
+            binding.weightSpinner.setSelection(weight_list.indexOf(userData.weight!!))
+            binding.sexSpinner.setSelection(gender.ordinal)
+            binding.activitySpinner.setSelection(activity.ordinal)
+            binding.buttonSubmit.text = getString(R.string.button_update_text)
+            binding.buttonLogOut.isEnabled = true
+            binding.buttonLogOut.visibility = View.VISIBLE
+            currentUser = userData
+        } ?: run {
+            binding.name.setText("")
+            binding.ageSpinner.setSelection(0)
+            binding.citySpinner.setSelection(0)
+            binding.feetSpinner.setSelection(0)
+            binding.inchesSpinner.setSelection(0)
+            binding.weightSpinner.setSelection(0)
+            binding.sexSpinner.setSelection(0)
+            binding.activitySpinner.setSelection(0)
+            binding.buttonSubmit.text = getString(R.string.button_submit_text)
+            binding.buttonLogOut.isEnabled = false
+            binding.buttonLogOut.visibility = View.GONE
+        }
     }
 
     //
@@ -167,8 +215,11 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
     override fun onClick(view: View) {
 
         when (view.id) {
+            R.id.button_log_out -> {
+                currentUser = null
+                mLifestyleViewModel.clearActive()
+            }
             R.id.button_submit -> {
-
                 mFullName = mTvFullName!!.text.toString()
                 if (mFullName.isNullOrBlank()) {
                     //Complain that there's no text
@@ -179,12 +230,18 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
                         ""
                     ).toInt()
                     // pass the user data down to the LifestyleRepository via the view model
-                    mLifestyleViewModel.setUserData(UserData(mFullName!!, mAge!!, mCity!!, mCountry!!,
-                        height, mWeight!!, mSex!!, mActivity!!))
-
+                    val data = UserData(mFullName!!, mAge!!, mCity!!, mCountry!!,
+                        height, mWeight!!, mSex!!, mActivity!!)
+                    currentUser?.let {
+                        // Update with the user input values, but preserve the ID and active bit
+                        data.id = currentUser!!.id
+                        data.active = currentUser!!.active
+                        mLifestyleViewModel.updateUserData(data)
+                    } ?: run {
+                        data.active = 1
+                        mLifestyleViewModel.setUserData(data)
+                    }
                 }
-
-
             }
             R.id.button_take_pic -> {
                 //The button press should open a camera

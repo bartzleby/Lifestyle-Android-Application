@@ -9,6 +9,12 @@ interface LifestyleDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(userTable: UserData)
 
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun update(userTable: UserData)
+
+    @Query("UPDATE user_table SET active = 0")
+    suspend fun clearActive()
+
     @Query("DELETE from user_table")
     suspend fun clearUserTable()
 
@@ -18,7 +24,7 @@ interface LifestyleDao {
 
     // most recent user information submission is considered current user
     // select the location associated with the most recently added user information
-    @Query("SELECT * FROM user_table ORDER BY id DESC LIMIT 1")
+    @Query("SELECT * FROM user_table WHERE active = 1")
     fun getCurrentUserData(): Flow<UserData>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

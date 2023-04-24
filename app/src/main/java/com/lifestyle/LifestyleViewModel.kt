@@ -19,6 +19,14 @@ class LifestyleViewModel(repository: LifestyleRepository) : ViewModel() {
         mLifestyleRepository.setUserData(userData)
     }
 
+    fun updateUserData(userData: UserData) {
+        mLifestyleRepository.updateUserData(userData)
+    }
+
+    fun clearActive() {
+        mLifestyleRepository.clearActive()
+    }
+
     fun clearUserData() {
         mLifestyleRepository.clearUserData()
     }

@@ -23,6 +23,9 @@ class UserData(
     @field:PrimaryKey(autoGenerate = true)
     var id: Int = 0
 
+    @field:ColumnInfo(name = "active")
+    var active: Int = 0
+
     @field:ColumnInfo(name = "full_name")
     @NonNull
     var fullName: String = fullName

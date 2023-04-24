@@ -15,6 +15,9 @@
     <string name="text_view_bmr_awaiting_user_data">(Awaiting user data)</string>
 
     <string name="button_register_text">Register</string>
+    <string name="button_submit_text">Submit</string>
+    <string name="button_update_text">Update</string>
+    <string name="button_log_out_text">Log Out</string>
     <string name="fab_find_hikes_nearby">Find hikes nearby</string>
     <string name="fab_weather">Find the local weather</string>
     <string name="label_weather_fragment">Weather</string>

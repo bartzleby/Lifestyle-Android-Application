@@ -34,6 +34,20 @@ class LifestyleRepository private constructor(lifestyleDao: LifestyleDao) {
     }
 
     @WorkerThread
+    fun updateUserData(userData: UserData) {
+        mScope.launch(Dispatchers.IO) {
+            mLifestyleDao.update(userData)
+        }
+    }
+
+    @WorkerThread
+    fun clearActive() {
+        mScope.launch {
+            mLifestyleDao.clearActive()
+        }
+    }
+
+    @WorkerThread
     fun clearUserData() {
         mScope.launch {
             mLifestyleDao.clearUserTable()

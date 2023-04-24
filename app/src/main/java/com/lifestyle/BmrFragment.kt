@@ -39,6 +39,10 @@ fun poundsToKilograms(pounds: Int): Int {
     return (pounds / 2.205).toInt()
 }
 
+fun activityLabelToEnum(label: String): String {
+    return label.split(" ").joinToString("_").uppercase()
+}
+
 class BmrFragment : Fragment() {
     private var _binding: FragmentBmrBinding? = null
 
@@ -65,7 +69,7 @@ class BmrFragment : Fragment() {
             val age = userData.age!!
             val height = userData.height!!
             val weight = userData.weight!!
-            val activity = Activity.valueOf(userData.activity!!.replace(" ", "_").uppercase())
+            val activity = Activity.valueOf(activityLabelToEnum(userData.activity!!))
             val calculatedBMR: Int = calculateBMR(gender, age, inchesToCentimeters(height), poundsToKilograms(weight))
             binding.textViewBmrBasePreface.text = getString(R.string.text_view_bmr_base_preface).format(
                 gender,

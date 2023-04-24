@@ -253,12 +253,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_below="@id/button_take_pic"
-                android:text="Submit"
+                android:text="@string/button_submit_text"
                 android:id="@+id/button_submit"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentBottom="true"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="8dp" />
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_below="@id/button_submit"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:text="@string/button_log_out_text"
+                android:id="@+id/button_log_out"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="8dp"
+                android:enabled="false"
+                android:visibility="gone" />
 
     </RelativeLayout>
 
