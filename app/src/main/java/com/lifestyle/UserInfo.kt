@@ -15,7 +15,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.google.android.material.snackbar.Snackbar
 import com.lifestyle.databinding.FragmentUserInfoBinding
 import java.util.*
 
@@ -207,6 +206,7 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
 
         when (view.id) {
             R.id.button_log_out -> {
+                Toast.makeText(activity, "User logged out.", Toast.LENGTH_SHORT).show()
                 binding.name.setText("")
                 binding.ageSpinner.setSelection(0)
                 binding.citySpinner.setSelection(0)
@@ -215,14 +215,14 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
                 binding.weightSpinner.setSelection(0)
                 binding.sexSpinner.setSelection(0)
                 binding.activitySpinner.setSelection(0)
-                currentUser = null
                 mLifestyleViewModel.clearActive()
+                currentUser = null
             }
             R.id.button_submit -> {
                 mFullName = mTvFullName!!.text.toString()
                 if (mFullName.isNullOrBlank()) {
                     //Complain that there's no text
-                    Snackbar.make(view, "Please enter your full name.", Snackbar.LENGTH_LONG).show()
+                    Toast.makeText(activity, "Please enter your full name.", Toast.LENGTH_SHORT).show()
                 } else {
                     val height = mHeight!![0].digitToInt() * 12 + mInches!!.replace(
                         "\"",
@@ -233,10 +233,12 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
                         height, mWeight!!, mSex!!, mActivity!!)
                     currentUser?.let {
                         // Update with the user input values, but preserve the ID and active bit
+                        Toast.makeText(activity, "User info successfully updated.", Toast.LENGTH_SHORT).show()
                         data.id = currentUser!!.id
                         data.active = currentUser!!.active
                         mLifestyleViewModel.updateUserData(data)
                     } ?: run {
+                        Toast.makeText(activity, "User registration successful!", Toast.LENGTH_SHORT).show()
                         data.active = 1
                         mLifestyleViewModel.setUserData(data)
                     }
@@ -248,7 +250,7 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
                 try {
                     cameraActivity.launch(cameraIntent)
                 } catch (ex: ActivityNotFoundException) {
-                    Toast.makeText(activity, "Unable to launch camera", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "Unable to launch camera", Toast.LENGTH_SHORT).show()
                 }
             }
         }
