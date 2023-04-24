@@ -83,6 +83,10 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
         if (savedBitmap != null || bitmap != null) {
             mIvPic!!.setImageBitmap(savedBitmap ?: bitmap)
         }
+        // https://stackoverflow.com/questions/51073244/android-mvvm-how-to-make-livedata-emits-the-data-it-has-forcing-to-trigger-th
+        // Force a LiveData emit, otherwise observer won't be called when switching from different fragment
+        mLifestyleViewModel.liveUserData.removeObservers(this)
+        mLifestyleViewModel.liveUserData.observe(this, userDataObserver)
     }
 
     override fun onCreateView(
@@ -90,13 +94,8 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentUserInfoBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        // Inflate the layout for this fragment
-        val view = binding.root//inflater.inflate(R.layout.fragment_user_info, container, false)
-
-        // https://stackoverflow.com/questions/51073244/android-mvvm-how-to-make-livedata-emits-the-data-it-has-forcing-to-trigger-th
-        // Force a LiveData emit, otherwise observer won't be called when switching from different fragment
-        mLifestyleViewModel.liveUserData.removeObservers(this)
         mLifestyleViewModel.liveUserData.observe(this, userDataObserver)
 
         //Get the buttons
@@ -153,14 +152,6 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
             binding.buttonLogOut.visibility = View.VISIBLE
             currentUser = userData
         } ?: run {
-            binding.name.setText("")
-            binding.ageSpinner.setSelection(0)
-            binding.citySpinner.setSelection(0)
-            binding.feetSpinner.setSelection(0)
-            binding.inchesSpinner.setSelection(0)
-            binding.weightSpinner.setSelection(0)
-            binding.sexSpinner.setSelection(0)
-            binding.activitySpinner.setSelection(0)
             binding.buttonSubmit.text = getString(R.string.button_submit_text)
             binding.buttonLogOut.isEnabled = false
             binding.buttonLogOut.visibility = View.GONE
@@ -216,6 +207,14 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
 
         when (view.id) {
             R.id.button_log_out -> {
+                binding.name.setText("")
+                binding.ageSpinner.setSelection(0)
+                binding.citySpinner.setSelection(0)
+                binding.feetSpinner.setSelection(0)
+                binding.inchesSpinner.setSelection(0)
+                binding.weightSpinner.setSelection(0)
+                binding.sexSpinner.setSelection(0)
+                binding.activitySpinner.setSelection(0)
                 currentUser = null
                 mLifestyleViewModel.clearActive()
             }
