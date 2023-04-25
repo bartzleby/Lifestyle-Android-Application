@@ -37,6 +37,7 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
     }
 
     private var currentUser: UserData? = null
+    private var currentUserDataWasPopulated: Boolean? = null
 
     private var mThumbnailImage: Bitmap? = null
 
@@ -82,6 +83,7 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
         if (savedBitmap != null || bitmap != null) {
             mIvPic!!.setImageBitmap(savedBitmap ?: bitmap)
         }
+        currentUserDataWasPopulated = savedInstanceState != null
         // https://stackoverflow.com/questions/51073244/android-mvvm-how-to-make-livedata-emits-the-data-it-has-forcing-to-trigger-th
         // Force a LiveData emit, otherwise observer won't be called when switching from different fragment
         mLifestyleViewModel.liveUserData.removeObservers(this)
@@ -138,14 +140,17 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
             val gender = Gender.valueOf(userData.sex!!.uppercase())
             val height = userData.height!!
             val activity = Activity.valueOf(activityLabelToEnum(userData.activity!!))
-            binding.name.setText(userData.fullName)
-            binding.ageSpinner.setSelection(age_list.indexOf(userData.age!!))
-            binding.citySpinner.setSelection(city_list.indexOf(userData.city!!))
-            binding.feetSpinner.setSelection(feet_list.indexOf("%d\'".format(height / 12)))
-            binding.inchesSpinner.setSelection(inches_list.indexOf("%d\"".format(height % 12)))
-            binding.weightSpinner.setSelection(weight_list.indexOf(userData.weight!!))
-            binding.sexSpinner.setSelection(gender.ordinal)
-            binding.activitySpinner.setSelection(activity.ordinal)
+            // Populate user data when fragment is freshly loaded (not on app rotate or restore)
+            if (!currentUserDataWasPopulated!!) {
+                binding.name.setText(userData.fullName)
+                binding.ageSpinner.setSelection(age_list.indexOf(userData.age!!))
+                binding.citySpinner.setSelection(city_list.indexOf(userData.city!!))
+                binding.feetSpinner.setSelection(feet_list.indexOf("%d\'".format(height / 12)))
+                binding.inchesSpinner.setSelection(inches_list.indexOf("%d\"".format(height % 12)))
+                binding.weightSpinner.setSelection(weight_list.indexOf(userData.weight!!))
+                binding.sexSpinner.setSelection(gender.ordinal)
+                binding.activitySpinner.setSelection(activity.ordinal)
+            }
             binding.buttonSubmit.text = getString(R.string.button_update_text)
             binding.buttonLogOut.isEnabled = true
             binding.buttonLogOut.visibility = View.VISIBLE
@@ -203,7 +208,6 @@ class UserInfo : Fragment(), View.OnClickListener, AdapterView.OnItemSelectedLis
     }
 
     override fun onClick(view: View) {
-
         when (view.id) {
             R.id.button_log_out -> {
                 Toast.makeText(activity, "User logged out.", Toast.LENGTH_SHORT).show()
