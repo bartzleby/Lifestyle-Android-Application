@@ -34,16 +34,5 @@
             app:elevation="0dp"
             app:srcCompat="@drawable/baseline_hiking_24" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:translationY="-16dp"
-            app:layout_anchor="@+id/fab_hikes_nearby"
-            android:contentDescription="@string/fab_location"
-            app:layout_anchorGravity="top"
-            app:elevation="0dp"
-            app:srcCompat="@drawable/baseline_my_location_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

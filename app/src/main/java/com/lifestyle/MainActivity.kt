@@ -1,70 +1,38 @@
 package com.lifestyle
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.location.Geocoder
-import android.content.pm.PackageManager
-import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.commit
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import com.lifestyle.databinding.ActivityMainBinding
 import java.util.*
+import androidx.lifecycle.Observer
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private var findHikesNearMe: String? = "hikes near"
-    //private var mButtonRegister: Button? = null
     private var navController: NavController? = null
+    private var mCity: String? = null
 
-    private var FINE_LOCATION_REQUEST: Int = 100
-
-    // FusedLocationProviderClient - Main class for receiving location updates.
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    //    private var locationData: LocationData? = null
-    private var longitude: Double? = null
-    private var latitude: Double? = null
-
-    private var city: String? = null
-    private var country: String? = null
-    private var address: String? = null
-
-    private var locationShared: Boolean? = null
-
-    private lateinit var geocoder: Geocoder
-
-    private val requestPermissionLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                Log.i("Permission: ", "Granted")
-            } else {
-                Log.i("Permission: ", "Denied")
-            }
-        }
+    private val mLifestyleViewModel: LifestyleViewModel by viewModels {
+        LifestyleViewModelFactory((application as LifestyleApplication).repository)
+    }
 
     private fun navigateToFragmentFromItem(item: MenuItem): Boolean {
         var fragmentId: Int? = null
@@ -72,11 +40,7 @@ class MainActivity : AppCompatActivity() {
             R.id.BmrFragment -> fragmentId = R.id.BmrFragment
             R.id.UserInfo -> fragmentId = R.id.UserInfo
             R.id.WeatherFragment -> {
-                if (locationShared!!) {
                     fragmentId = R.id.WeatherFragment
-                } else {
-                    Toast.makeText(this, "Please share your location to access weather", Toast.LENGTH_LONG).show()
-                }
             }
         }
         fragmentId?.let {
@@ -90,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        locationShared = false
+        mLifestyleViewModel.liveUserData.observe(this, userDataObserver)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -108,83 +72,34 @@ class MainActivity : AppCompatActivity() {
             binding.navigationBar!!.setupWithNavController(navController!!)
         }
 
-        binding.fabLocation?.setOnClickListener { view ->
-            when (view.id) {
-                R.id.fab_location -> {
-                    requestLocationPermission(view, "rGeocode")
-                }
-            }
-        }
-
         // When the user clicks on the fabHikesNearby object, Google Maps opens and searches for
-        // "hikes nearby" near the users location
+        // "hikes near <city>" near the users set location
         binding.fabHikesNearby?.setOnClickListener { view ->
             when (view.id) {
                 R.id.fab_hikes_nearby -> {
-                    if (locationShared!!) {
-                        requestLocationPermission(view, "hike")
-                    }
-                    else {
-                        Toast.makeText(this, "Please share your location to find hikes near you", Toast.LENGTH_LONG).show()
-                    }
+                    findHikesNearby(view)
                 }
             }
         }
 
     }
 
-    private fun requestLocationPermission(view: View, action: String) {
-        when {
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                // Permission is granted, set it
-                fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-                geocoder = Geocoder(this, Locale.getDefault())
-                fusedLocationProviderClient.lastLocation
-                    .addOnSuccessListener { location: Location? ->
-                        if (location != null) {
-                            latitude  = location.latitude
-                            longitude = location.longitude
-
-                            println("After setting data...")
-                            println("Latitude = " + latitude)
-                            println("Longitude = " + longitude)
-                            println("Raw data...")
-                            println("Latitude = " + location.latitude)
-                            println("Longitude = " + location.longitude)
-
-                            if (action.equals("hike")){
-                                findHikesNearby(view)
-                            }
-                            else if (action.equals("rGeocode")) {
-                                getCityAndCountry()
-                            }
-                            else if (action.equals("weather")) {
-                                getWeather()
-                            }
-                        }
-                    }
-            }
-            ActivityCompat.shouldShowRequestPermissionRationale(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) -> {
-                Toast.makeText(this, "Location access required for weather and hiking services", Toast.LENGTH_LONG).show()
-            } else -> {
-                // Permission has not been asked yet
-                requestPermissionLauncher.launch(
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                )
+    private val userDataObserver: Observer<UserData> =
+        Observer { userData ->
+            if (userData != null) {
+                mCity = userData.city
             }
         }
-    }
 
-
+    // Open Google Maps searching for hikes near the users set location
     private fun findHikesNearby(view: View) {
-        if (isLocationPermissionGranted()) {
-            val searchUri = Uri.parse("geo:0,0?q=$findHikesNearMe $address")
+        val TAG = "findHikesNearby"
+        Log.d(TAG, "mCity = $mCity")
+
+        if (mCity != null) {
+            val findHikesNear = "hikes near"
+
+            val searchUri = Uri.parse("geo:0,0?q=$findHikesNear $mCity")
 
             // create the mapIntent
             val mapIntent = Intent(Intent.ACTION_VIEW, searchUri)
@@ -199,51 +114,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         else {
-            Snackbar.make(view, "Please enable location permissions to find hikes near you.", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Please submit location data to find hikes near you.", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
     }
 
-
-    private fun getCityAndCountry() {
-        val geocodeListener = Geocoder.GeocodeListener { addresses ->
-            country = addresses[0].countryName
-            city = addresses[0].locality
-            address = addresses[0].getAddressLine(0)
-        }
-        geocoder.getFromLocation(
-            latitude!!,
-            longitude!!,
-            1,
-            geocodeListener
-        )
-
-        locationShared = true
-    }
-
-
-    private fun getWeather() {
-        // TODO: implement this method
-    }
-
-    private fun isLocationPermissionGranted(): Boolean {
-        return if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ),
-                FINE_LOCATION_REQUEST
-            )
-            false
-        } else {
-            true
-        }
-    }
 
 
 /**   override fun onClick(view: View) {
@@ -252,8 +127,6 @@ class MainActivity : AppCompatActivity() {
                 val fragment = UserInfo.newInstance();
                 val transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id., fragment).commit();
-
-
             }
         }
     }
