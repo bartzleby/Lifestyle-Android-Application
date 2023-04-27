@@ -5,22 +5,6 @@
         android:layout_height="match_parent">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
-            android:contentDescription="@string/fab_location"
-            app:layout_constraintBottom_toTopOf="@+id/fab_hikes_nearby"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:elevation="0dp"
-            app:srcCompat="@drawable/baseline_my_location_24" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_hikes_nearby"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,7 +13,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:contentDescription="@string/fab_find_hikes_nearby"
-            app:layout_constraintTop_toBottomOf="@+id/fab_location"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
