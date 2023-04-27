@@ -88,6 +88,10 @@ class MainActivity : AppCompatActivity() {
         Observer { userData ->
             if (userData != null) {
                 mCity = userData.city
+            } else {
+                // if the user is logged out, make sure the location is set
+                // to null so that they are prompted to submit their info
+                mCity = null
             }
         }
 
